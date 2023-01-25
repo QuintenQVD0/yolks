@@ -20,7 +20,7 @@ FROM --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
 RUN		dpkg --add-architecture armhf
 
 RUN		apt update \
-        && apt install -y wget \
+        && apt install -y wget gnupg2  \
 		&& wget https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -O /etc/apt/sources.list.d/box86.list \
 		&& wget -qO- https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | apt-key add - \
 		&& apt update && apt install box86:armhf libc6 libc6:armhf -y
