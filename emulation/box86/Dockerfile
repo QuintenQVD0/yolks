@@ -17,6 +17,8 @@
 
 FROM  debian:bullseye-slim
 
+ENV     DEBIAN_FRONTEND noninteractive
+
 RUN		dpkg --add-architecture armhf
 
 RUN		apt update \
@@ -34,10 +36,7 @@ RUN dpkg --add-architecture armhf && \
     apt-get clean autoclean && \
     rm -rf /tmp/* /var/tmp/* /var/lib/apt/lists
 	
-RUN         dpkg --add-architecture i386 \
-            && apt update \
-            && apt upgrade -y \
-			&& apt install -y libtbb2:i386 libtbb-dev:i386 libicu-dev:i386 libstdc++6 dnsutils libsdl2-2.0-0
+RUN        apt install -y libc6:armhf libncurses5:armhf libsdl2-2.0-0 libsdl2-2.0-0:armhf libsdl2*:armhf libopenal*:armhf libpng*:armhf libfontconfig*:armhf libXcomposite*:armhf libbz2-dev:armhf libXtst*:armhf
 			
 RUN 		 apt-get update && apt-get install -y apt-transport-https
 RUN          apt install -y libc++-dev libc6 git wget curl tar zip unzip binutils xz-utils liblzo2-2 cabextract iproute2 net-tools libatomic1 libsdl1.2debian libsdl2-2.0-0 \
