@@ -1,19 +1,18 @@
-#arm64v8
-FROM debian:bullseye-slim as build
+#FROM debian:bullseye-slim as build
 
-RUN dpkg --add-architecture armhf && \
-    apt-get update && \
-    apt-get install --yes --no-install-recommends git  python3 build-essential cmake ca-certificates && \
-    apt-get install --yes --no-install-recommends gcc-arm-linux-gnueabihf libc6-dev-armhf-cross libc6:armhf libstdc++6:armhf && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
+#RUN dpkg --add-architecture armhf && \
+#    apt-get update && \
+#    apt-get install --yes --no-install-recommends git  python3 build-essential cmake ca-certificates && \
+#    apt-get install --yes --no-install-recommends gcc-arm-linux-gnueabihf libc6-dev-armhf-cross libc6:armhf libstdc++6:armhf && \
+#    apt-get clean && \
+#    rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
 
-RUN git clone https://github.com/ptitSeb/box86.git; mkdir /box86/build
+#RUN git clone https://github.com/ptitSeb/box86.git; mkdir /box86/build
 
-WORKDIR /box86/build
-RUN cmake .. -DRPI4ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo && \
-    make -j$(nproc) && \
-    make install DESTDIR=/tmp/install
+#WORKDIR /box86/build
+#RUN cmake .. -DRPI4ARM64=1 -DCMAKE_BUILD_TYPE=RelWithDebInfo && \
+#    make -j$(nproc) && \
+#    make install DESTDIR=/tmp/install
 
 
 FROM --platform=linux/arm64 golang:1.16.7-bullseye as builder
@@ -27,9 +26,16 @@ RUN 	git clone https://github.com/gorcon/rcon-cli.git \
 		&& go build -v ./cmd/gorcon \
 		&& mv gorcon /tmp/rcon
 
-FROM debian:bullseye-slim
+FROM --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
 
-COPY --from=build /tmp/install /
+RUN		dpkg --add-architecture armhf
+
+RUN		apt install -y wget \
+		&& wget https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -O /etc/apt/sources.list.d/box86.list \
+		&& wget -qO- https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | apt-key add - \
+		&& apt update && apt install box86:armhf libc6 libc6:armhf -y
+
+#COPY --from=build /tmp/install /
 COPY --from=builder /tmp/rcon /usr/local/bin/rcon
 
 RUN dpkg --add-architecture armhf && \
