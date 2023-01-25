@@ -26,7 +26,7 @@ RUN 	git clone https://github.com/gorcon/rcon-cli.git \
 		&& go build -v ./cmd/gorcon \
 		&& mv gorcon /tmp/rcon
 
-FROM --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
+FROM  debian:bullseye-slim
 
 RUN		dpkg --add-architecture armhf
 

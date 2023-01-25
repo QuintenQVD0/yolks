@@ -15,7 +15,7 @@
 #    make -j$(nproc) && \
 #    make install DESTDIR=/tmp/install
 
-FROM --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
+FROM  debian:bullseye-slim
 
 RUN		dpkg --add-architecture armhf
 
