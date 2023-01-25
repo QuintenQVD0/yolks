@@ -90,11 +90,9 @@ jobs:
       fail-fast: false
       matrix:
         tag:
-          - steamcmd_ubuntu
-          - redis_7
-          - debian
           - ubuntu
           - crystal
+          - nodejs_18_puppeteer
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
