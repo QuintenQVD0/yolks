@@ -35,11 +35,7 @@ ENV     DEBIAN_FRONTEND noninteractive
 #COPY --from=build-box86 /tmp/install /
 #COPY --from=build-box64 /tmp/install /
 
-##Install box64
-RUN         wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list \
-            && wget -O- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor | tee /usr/share/keyrings/box64-debs-archive-keyring.gpg \
-            && apt update && apt install box64 -y
-
+## install box86
 RUN		dpkg --add-architecture armhf
 
 RUN		apt update \
@@ -48,7 +44,14 @@ RUN		apt update \
 		&& wget -qO- https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | apt-key add - \
 		&& apt update && apt install box86:armhf libc6 libc6:armhf -y
 
-        
+##Install box64
+RUN         wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list \
+            && wget -O- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor | tee /usr/share/keyrings/box64-debs-archive-keyring.gpg \
+            && apt update && apt install box64 -y
+
+
+
+
 RUN dpkg --add-architecture armhf && \
     apt-get update && \
     apt-get install --yes --no-install-recommends libc6:armhf libstdc++6:armhf gcc-arm-linux-gnueabihf libc6:armhf libncurses5:armhf libsdl2-image-2.0-0:armhf && \
