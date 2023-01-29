@@ -93,6 +93,7 @@ jobs:
           - ubuntu
           - crystal
           - nodejs_18_puppeteer
+          - steamcmd
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
