@@ -53,7 +53,7 @@ jobs:
   #         rm -rf /tmp/.buildx-cache
   #         mv /tmp/.buildx-cache-new /tmp/.buildx-cache
 
-   pushAll:
+  pushAll:
      name: "yolks:tempALL_${{ matrix.tag }}"
      runs-on: ubuntu-latest
      strategy:
