@@ -17,9 +17,9 @@ RUN         apt update \
             && npm -g install npm@latest 
 
 RUN		echo "deb https://notesalexp.org/tesseract-ocr5/$(lsb_release -cs)/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/notesalexp.list > /dev/null \
-			wget -O - https://notesalexp.org/debian/alexp_key.asc | apt-key add - \
-			apt update \
-			apt -y install tesseract-ocr
+		&& wget -O - https://notesalexp.org/debian/alexp_key.asc | apt-key add - \
+		&& apt update \
+		&& apt -y install tesseract-ocr
 
 USER        container
 ENV         USER=container HOME=/home/container
