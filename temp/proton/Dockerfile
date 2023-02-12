@@ -11,7 +11,7 @@ RUN     DOWNLOAD_URL=$(curl -s https://api.github.com/repos/GloriousEggroll/prot
         && mkdir -p /tmp/download  && mkdir /usr/local/bin/proton \
         && cd /tmp/download && ls -la\
         && curl --progress-bar -sSL -o GE-Proton.tar.gz ${DOWNLOAD_URL} && ls -la \
-        && tar -xf --strip-components=1 GE-Proton.tar.gz -C /usr/local/bin/proton \
+        && tar -xvf GE-Proton.tar.gz --strip-components=1 -C /usr/local/bin/proton \
         && ls -la /usr/local/bin \
         && ls -la /usr/local/bin/proton \
         && export PATH=/usr/local/bin/proton:$PATH
