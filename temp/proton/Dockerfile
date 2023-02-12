@@ -6,7 +6,7 @@ RUN     dpkg --add-architecture i386 \
         && apt install -y --no-install-recommends jq gnupg2 tzdata numactl python3 software-properties-common libntlm0 winbind xvfb xauth python3 libncurses5:i386 libncurses6:i386 libsdl2-2.0-0 libsdl2-2.0-0:i386
 
 # Install PROTON and with recommends
-RUN     DOWNLOAD_URL=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | jq .assets | jq -r .[].browser_download_url | grep -i tar.gz | head-1) \
+RUN     DOWNLOAD_URL=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | jq .assets | jq -r .[].browser_download_url | grep -i tar.gz | head -1) \
         && echo ${DOWNLOAD_URL} \
         && mkdir -p /tmp/download  && mkdir /usr/local/bin/proton \
         && cd /tmp/download && ls -la\
