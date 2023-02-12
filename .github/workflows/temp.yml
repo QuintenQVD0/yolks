@@ -91,10 +91,8 @@ jobs:
       fail-fast: false
       matrix:
         tag:
-          - ubuntu
           - crystal
           - nodejs_18_puppeteer
-          - steamcmd
           - proton
     steps:
       - uses: actions/checkout@v2
