@@ -7,7 +7,7 @@ RUN     dpkg --add-architecture i386 \
 
 # Install PROTON and with recommends
 RUN     DOWNLOAD_URL=$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | jq .assets | jq -r .[].browser_download_url | grep -i tar.gz | head-1) \
-        && echo ${DOWNLOAD_URL}
+        && echo ${DOWNLOAD_URL} \
         && mkdir -p /tmp/download  && mkdir /usr/local/bin/proton \
         && cd /tmp/download && ls -la\
         && curl --progress-bar -sSL -o GE-Proton.tar.gz ${DOWNLOAD_URL} && ls -la \
