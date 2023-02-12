@@ -95,6 +95,7 @@ jobs:
           - crystal
           - nodejs_18_puppeteer
           - steamcmd
+          - proton
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
