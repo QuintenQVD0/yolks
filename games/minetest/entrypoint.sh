@@ -1,4 +1,4 @@
-#!/bin/ash
+#!/bin/bash
 
 # Default the TZ environment variable to UTC.
 TZ=${TZ:-UTC}
@@ -13,7 +13,7 @@ cd /home/container || exit 1
 
 # Print minetest version
 printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mminetest --version\n"
-/usr/bin/minetest --version
+minetest --version
 
 # Replace Startup Variables
 MODIFIED_STARTUP="eval $(echo ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g')"
