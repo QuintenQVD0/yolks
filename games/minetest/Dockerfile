@@ -8,7 +8,7 @@ RUN         apt update -y \
 
 
 RUN			add-apt-repository -y ppa:minetestdevs/stable
-RUN			apt update && apt install minetest
+RUN			apt update && apt -y install minetest
 
 
 USER        container
