@@ -1,4 +1,4 @@
-FROM        --platform=$BUILDPLATFORM debian:stable-slim
+FROM        debian:bullseye-slim
 
 ## Update base packages and install dependencies
 ENV         DEBIAN_FRONTEND=noninteractive
@@ -22,7 +22,9 @@ RUN         dpkg --add-architecture i386 \
                 lib32stdc++6 \
                 libcap2 \
                 libnss-wrapper \
-				python3
+				python3 \
+				gnutls-bin \
+				pulseaudio 
 
 ## Configure locale
 RUN         update-locale lang=en_US.UTF-8 \
