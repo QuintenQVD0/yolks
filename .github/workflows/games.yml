@@ -76,7 +76,7 @@ jobs:
         with:
           username: ${{ secrets.REPOSITORY_OWNER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
-      - uses: docker/build-push-action@v2
+      - uses: docker/build-push-action@v4
         with:
           context: ./games/${{ matrix.tag }}
           file: ./games/${{ matrix.tag }}/Dockerfile
@@ -93,6 +93,7 @@ jobs:
       matrix:
         tag:
           - minetest
+          - dayz
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
@@ -107,7 +108,7 @@ jobs:
         with:
           username: ${{ secrets.REPOSITORY_OWNER }}
           password: ${{ secrets.REGISTRY_TOKEN }}
-      - uses: docker/build-push-action@v2
+      - uses: docker/build-push-action@v4
         with:
           context: ./games/${{ matrix.tag }}
           file: ./games/${{ matrix.tag }}/Dockerfile
