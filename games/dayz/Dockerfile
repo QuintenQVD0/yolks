@@ -23,6 +23,7 @@ RUN         dpkg --add-architecture i386 \
                 libcap2 \
                 libnss-wrapper \
 				python3 \
+				python3-pip \
 				gnutls-bin \
 				pulseaudio 
 
