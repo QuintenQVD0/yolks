@@ -21,7 +21,8 @@ RUN         dpkg --add-architecture i386 \
                 libstdc++6:i386 \
                 lib32stdc++6 \
                 libcap2 \
-                libnss-wrapper
+                libnss-wrapper \
+				python3
 
 ## Configure locale
 RUN         update-locale lang=en_US.UTF-8 \
