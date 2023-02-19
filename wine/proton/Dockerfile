@@ -14,8 +14,8 @@ RUN         useradd -d /home/container -m container
 
 # Download Proton GE
 RUN         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-RUN         flatpak install com.valvesoftware.Steam.CompatibilityTool.Proton-GE
-RUN         flatpak install flathub com.valvesoftware.Steam
+RUN         flatpak -y install com.valvesoftware.Steam.CompatibilityTool.Proton-GE
+RUN         flatpak -y install flathub com.valvesoftware.Steam
 
 # Proton Fix machine-id
 RUN         rm -f /etc/machine-id
