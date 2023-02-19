@@ -13,9 +13,9 @@ RUN         apt install -y alsa-tools libpulse0 pulseaudio libpulse-dev libasoun
 RUN         useradd -d /home/container -m container
 
 # Download Proton GE
-flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
-flatpak install com.valvesoftware.Steam.CompatibilityTool.Proton-GE
-flatpak install flathub com.valvesoftware.Steam
+RUN         flatpak remote-add --if-not-exists flathub https://flathub.org/repo/flathub.flatpakrepo
+RUN         flatpak install com.valvesoftware.Steam.CompatibilityTool.Proton-GE
+RUN         flatpak install flathub com.valvesoftware.Steam
 
 # Proton Fix machine-id
 RUN         rm -f /etc/machine-id
