@@ -1,13 +1,17 @@
-FROM        --platform=$TARGETOS/$TARGETARCH alpine:edge
-
+FROM --platform=$TARGETOS/$TARGETARCH ubuntu:20.04
 ENV         DEBIAN_FRONTEND noninteractive
 
-RUN         apk add --update --no-cache ca-certificates curl ffmpeg git openssl minetest sqlite tar tzdata \
-				&& adduser -D -h /home/container container
+RUN         apt update -y \
+			&& apt install -y curl ca-certificates openssl git tar gnupg2 sqlite3 fontconfig tzdata iproute2 libfreetype6 software-properties-common \
+			&& useradd -d /home/container -m container
+
+
+RUN			add-apt-repository -y ppa:minetestdevs/stable
+RUN			apt update && apt -y install minetest
 
 USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
 
 COPY        ./entrypoint.sh /entrypoint.sh
-CMD         [ "/bin/ash", "/entrypoint.sh" ]
+CMD         [ "/bin/bash", "/entrypoint.sh" ]
