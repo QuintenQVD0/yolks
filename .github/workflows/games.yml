@@ -83,7 +83,7 @@ jobs:
           tags: |
             quintenqvd/pterodactyl_images:games_${{ matrix.tag }}
 
-   pushAMD:
+  pushAMD:
      name: "yolks:games_AMD_${{ matrix.tag }}"
      runs-on: ubuntu-latest
      strategy:
