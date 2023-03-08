@@ -7,12 +7,14 @@ RUN         apt update \
             && wget https://dot.net/v1/dotnet-install.sh \
 			&& mkdir -p /usr/share \
             && chmod +x dotnet-install.sh \
-			&& ./dotnet-install.sh -i /usr/share -v 6.0.405 \
+			&& D_V="$(curl -sSL https://dotnet.microsoft.com/en-us/download/dotnet/6.0 | grep -i  '<h3 id="sdk-6.*">SDK 6.*.*</h3>'  | head -1 | awk -F\" '{print $3}' | awk '{print $2;}' | replace "</h3>" "")" \
+			&& echo $D_V \			
+			&& ./dotnet-install.sh -i /usr/share -v $D_V \
 			&& ln -s /usr/share/dotnet /usr/bin/dotnet \
 			&& apt -y install ffmpeg wget iproute2 git ca-certificates tzdata zip tar libtool \
 			&& apt -y install libc6 libgcc1 libgssapi-krb5-2 libicu67 libssl1.1 libstdc++6 zlib1g libsdl2-2.0-0 libsdl2-dev \
 			&& apt update -y \
-			&& dotnet --info \
+			&& dotnet --version \
             && useradd -m -d /home/container container
 
 USER        container

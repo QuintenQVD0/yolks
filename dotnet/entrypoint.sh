@@ -4,8 +4,8 @@ cd /home/container
 # Make internal Docker IP address available to processes.
 export INTERNAL_IP=`ip route get 1 | awk '{print $(NF-2);exit}'`
 
-printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mdotnet --info\n"
-dotnet --info
+printf "\033[1m\033[33mcontainer@pterodactyl~ \033[0mdotnet --version\n"
+dotnet --version
 
 export DOTNET_ROOT=/usr/share/
 # Replace Startup Variables
