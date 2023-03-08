@@ -3,7 +3,7 @@ FROM        --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
 LABEL       author="QuintenQVD" maintainer="josdekurk@gmail.com"
 
 RUN         apt update \
-			&& apt -y install curl tar bzip2 file wget\
+			&& apt -y install curl tar bzip2 file wget sed \
             && wget https://dot.net/v1/dotnet-install.sh \
 			&& mkdir -p /usr/share \
             && chmod +x dotnet-install.sh \
