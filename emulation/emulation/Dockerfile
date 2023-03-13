@@ -15,7 +15,7 @@
 #    make install DESTDIR=/tmp/install
 
 
-FROM --platform=linux/arm64 golang:1.16.7-bullseye as builder
+FROM --platform=linux/arm64 golang:1.19.3-bullseye as builder
 
 RUN 	apt update \
 		&& apt install -y git curl gcc musl-dev
