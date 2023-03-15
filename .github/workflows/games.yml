@@ -16,7 +16,6 @@ jobs:
       fail-fast: false
       matrix:
         tag:
-          - rust
           - arma3
     steps:
       - uses: actions/checkout@v3
@@ -60,7 +59,6 @@ jobs:
       fail-fast: false
       matrix:
         tag:
-          - bastion
           - minetest
     steps:
       - uses: actions/checkout@v2

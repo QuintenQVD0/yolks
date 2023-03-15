@@ -92,7 +92,6 @@ jobs:
         tag:
           - crystal
           - nodejs_18_puppeteer
-          - proton
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
