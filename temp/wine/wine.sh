@@ -7,7 +7,7 @@ wget -q https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-i386
 
 dpkg-deb -x wine-staging-amd64.deb wine-installer
 dpkg-deb -x wine-staging_amd64.deb wine-installer
-dpkg-deb -x ine-staging_i386.deb wine-installer
+dpkg-deb -x wine-staging_i386.deb wine-installer
 
 echo -e "Installing wine . . ."
 mkdir -p /wine

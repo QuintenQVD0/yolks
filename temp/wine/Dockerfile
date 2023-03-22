@@ -49,7 +49,12 @@ RUN     ln -s /wine/bin/wine64 /usr/local/bin/wine64
 RUN     ln -s /wine/bin/wineboot /usr/local/bin/wineboot
 RUN     ln -s /wine/bin/winecfg /usr/local/bin/winecfg
 RUN     ln -s /wine/bin/wineserver /usr/local/bin/wineserver
-RUN     chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
+
+RUN     chmod +x /usr/local/bin/wine
+RUN     chmod +x /usr/local/bin/wine64
+RUN     chmod +x /usr/local/bin/wineboot
+RUN     chmod +x /usr/local/bin/winecfg
+RUN     chmox +x /usr/local/bin/wineserver
 
 # Set up Winetricks
 RUN	    wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
