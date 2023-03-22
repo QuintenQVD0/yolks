@@ -40,7 +40,7 @@ RUN        apt install -y libc6:armhf libncurses5:armhf libsdl2-2.0-0 libsdl2-2.
 ## wine
 COPY    ./wine.sh /wine.sh
 
-RUN     chmod +x /wine.sh \
+RUN     ls -la / && chmod +x wine.sh \
         && ./wine.sh
 
 # Set up Winetricks
