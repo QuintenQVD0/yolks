@@ -10,7 +10,10 @@ dpkg-deb -x wine-staging_amd64.deb wine-installer
 dpkg-deb -x ine-staging_i386.deb wine-installer
 
 echo -e "Installing wine . . ."
-mv wine-installer/opt/wine* ~/wine
+mkdir -p /wine
+mv wine-installer/opt/wine* /wine
+
+rm wine-staging_i386.deb wine-staging_amd64.deb wine-staging-amd64.deb
 
 sudo dpkg --add-architecture armhf && sudo apt-get update 
 sudo apt-get install -y libasound2:armhf libc6:armhf libglib2.0-0:armhf libgphoto2-6:armhf libgphoto2-port12:armhf \
@@ -39,12 +42,3 @@ rm libfaudio0_*~bpo10+1_i386.deb # clean up
 rm -rf libfaudio # clean up
 
 
-# Install symlinks
-sudo ln -s ~/wine/bin/wine /usr/local/bin/wine
-sudo ln -s ~/wine/bin/wine64 /usr/local/bin/wine64
-sudo ln -s ~/wine/bin/wineboot /usr/local/bin/wineboot
-sudo ln -s ~/wine/bin/winecfg /usr/local/bin/winecfg
-sudo ln -s ~/wine/bin/wineserver /usr/local/bin/wineserver
-sudo chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
-
-wine --version

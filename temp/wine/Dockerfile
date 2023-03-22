@@ -41,7 +41,15 @@ RUN        apt install -y libc6:armhf libncurses5:armhf libsdl2-2.0-0 libsdl2-2.
 COPY    ./wine.sh /wine.sh
 
 RUN     ls -la / && chmod +x wine.sh \
-        && ./wine.sh
+        && ./wine.sh \
+        && rm wine.sh
+
+RUN     ln -s /wine/bin/wine /usr/local/bin/wine
+RUN     ln -s /wine/bin/wine64 /usr/local/bin/wine64
+RUN     ln -s /wine/bin/wineboot /usr/local/bin/wineboot
+RUN     ln -s /wine/bin/winecfg /usr/local/bin/winecfg
+RUN     ln -s /wine/bin/wineserver /usr/local/bin/wineserver
+RUN     chmod +x /usr/local/bin/wine /usr/local/bin/wine64 /usr/local/bin/wineboot /usr/local/bin/winecfg /usr/local/bin/wineserver
 
 # Set up Winetricks
 RUN	    wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
