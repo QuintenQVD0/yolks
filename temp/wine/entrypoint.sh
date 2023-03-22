@@ -53,6 +53,21 @@ else
     echo -e "Not updating game server as auto update was set to 0. Starting Server"
 fi
 
+if [[ $XVFB == 1 ]]; then
+        Xvfb :0 -screen 0 ${DISPLAY_WIDTH}x${DISPLAY_HEIGHT}x${DISPLAY_DEPTH} &
+fi
+
+# Install necessary to run packages
+echo "First launch will throw some errors. Ignore them"
+
+mkdir -p $WINEPREFIX
+
+# List and install other packages
+for trick in $WINETRICKS_RUN; do
+        echo "Installing $trick"
+        winetricks -q $trick
+done
+
 # Replace Startup Variables
 MODIFIED_STARTUP=$(echo ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g')
 echo -e ":/home/container$ ${MODIFIED_STARTUP}"
