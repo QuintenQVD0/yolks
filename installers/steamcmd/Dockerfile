@@ -66,7 +66,7 @@ RUN         dpkg --add-architecture armhf \
 				&& apt upgrade -y \
 				&& apt -y --no-install-recommends install ca-certificates curl git wget
 
-RUN         apt install -y libc6:armhf libsdl2-2.0-0 libsdl2-2.0-0:armhf libncurses5:armhf libsdl2*:armhf libopenal*:armhf libpng*:armhf libfontconfig*:armhf libXcomposite*:armhf libbz2-dev:armhf libXtst*:armhf 
+RUN         apt install -y libc6:armhf libncurses5:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf libgl1:armhf libxinerama1:armhf libxdamage1:armh
 
 			
 ENV     STEAMOS=1
