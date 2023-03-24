@@ -3,7 +3,7 @@ FROM --platform=linux/arm64 ubuntu:22.04 as builder
 ENV   DEBIAN_FRONTEND noninteractive
 
 RUN 	apt update \
-		&& apt install -y git curl cmake ninja-build pkg-config clang llvm lld libsdl2-dev libepoxy-dev libssl-dev g++-x86-64-linux-gnu python3 python3-clang ibstdc++-10-dev-arm64-cross squashfs-tools libc-bin
+		&& apt install -y git curl cmake ninja-build pkg-config clang llvm lld libsdl2-dev libepoxy-dev libssl-dev g++-x86-64-linux-gnu python3 python3-clang libstdc++-10-dev-arm64-cross squashfs-tools libc-bin
 
 RUN     mkdir -p /usr/src && cd /usr/src \
         && git clone --recurse-submodules https://github.com/FEX-Emu/FEX.git \
