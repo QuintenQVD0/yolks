@@ -19,7 +19,7 @@ fi
 
 sleep 2
 
-if [ -f "/home/container/Config.yml" ]; then
+if [ -f "/home/container/Config.json" ]; then
     echo -e "\nNeeded config file exists, skipping"
 else 
     echo -e "\nNeeded config file does not exist. exiting"
