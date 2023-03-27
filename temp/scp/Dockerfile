@@ -1,4 +1,4 @@
-FROM  --platform=linux/arm64 quintenqvd/pterodactyl_images:installer:steamcmd
+FROM  --platform=linux/arm64 quintenqvd/pterodactyl_images:installer_steamcmd
 
 RUN         apt update \
             && apt -y upgrade
