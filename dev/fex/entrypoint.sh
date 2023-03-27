@@ -11,10 +11,10 @@ echo -e ":/home/container$ ${MODIFIED_STARTUP}"
 
 if [ -d "/home/container/rootfs" ]
 then
-    echo -e "\nThis server will need at least 9GB of disk space!"
-    export FEX_APP_DATA_LOCATION=/home/container/rootfs/; export FEX_APP_CONFIG_LOCATION=/home/container/; export XDG_DATA_HOME=/home/container; FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=22.04
+    echo "RootFS already downloaded"	 
 else
-    echo "RootFS already downloaded"
+    echo -e "\nThis server will need at least 9GB of disk space!"
+    export FEX_APP_DATA_LOCATION=/home/container/rootfs/; export FEX_APP_CONFIG_LOCATION=/home/container/; export XDG_DATA_HOME=/home/container; FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=22.04	
 fi
 
 sleep 2
