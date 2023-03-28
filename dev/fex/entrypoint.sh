@@ -14,7 +14,7 @@ then
     echo "RootFS already downloaded"	 
 else
     echo -e "\nThis server will need at least 9GB of disk space!"
-    export FEX_APP_DATA_LOCATION=/home/container/rootfs/; export FEX_APP_CONFIG_LOCATION=/home/container/; export XDG_DATA_HOME=/home/container; FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=22.04	
+    export FEX_APP_DATA_LOCATION=/home/container/rootfs/; export FEX_APP_CONFIG_LOCATION=/home/container/; export XDG_DATA_HOME=/home/container; FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=20.04
 fi
 
 sleep 2

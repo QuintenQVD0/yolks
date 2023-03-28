@@ -1,4 +1,4 @@
-FROM --platform=linux/arm64 ubuntu:22.04 as builder
+FROM --platform=linux/arm64 ubuntu:20.04 as builder
 
 ENV   DEBIAN_FRONTEND noninteractive
 
@@ -12,7 +12,7 @@ RUN     mkdir -p /usr/src && cd /usr/src \
         && ninja \
         && ls -la /usr/src/FEX/Build/Bin
 
-FROM --platform=linux/arm64 ubuntu:22.04
+FROM --platform=linux/arm64 ubuntu:20.04
 
 ENV   DEBIAN_FRONTEND noninteractive
 
@@ -22,7 +22,7 @@ RUN   useradd -m -d /home/container -s /bin/bash container
 COPY --from=builder /usr/src/FEX/Build/Bin /usr/local/bin/
 
 RUN     apt update \
-        && apt -y install curl git iproute2 libssl-dev squashfuse squashfs-tools tzdata tar \
+        && apt -y install curl git iproute2 libssl-dev squashfuse squashfs-tools tzdata tar libssl1.1 \
         && ls -la /usr/local/bin
 
 WORKDIR /home/container
