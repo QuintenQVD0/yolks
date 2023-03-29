@@ -60,6 +60,7 @@ jobs:
            - nodejs_16_dotnet_6
            - python_3_11_web
            - java_17
+           - bastion
      steps:
        - uses: actions/checkout@v2
        - name: Set up QEMU
