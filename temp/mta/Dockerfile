@@ -10,7 +10,7 @@ RUN   apt update \
         &&   apt upgrade -y
 
 ## install dependencies
-RUN   apt install -y iproute2 tar libssl1.1 curl git default-libmysqlclient-dev libmysqlclient-dev libreadline-gplv2-dev libncurses5-dev libncursesw5-dev libtool unzip libncurses5 libncursesw5 python3
+RUN   apt install -y iproute2 tar libssl1.1 curl git default-libmysqlclient-dev libmysqlclient-dev libreadline-gplv2-dev libncurses5-dev libncursesw5-dev libtool unzip libncurses5 libncursesw5 python3 openssl 
 
 ## configure locale
 RUN   update-locale lang=en_US.UTF-8 \
