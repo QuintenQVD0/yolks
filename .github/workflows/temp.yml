@@ -61,6 +61,7 @@ jobs:
            - python_3_11_web
            - java_17
            - bastion
+           - mta
      steps:
        - uses: actions/checkout@v2
        - name: Set up QEMU
