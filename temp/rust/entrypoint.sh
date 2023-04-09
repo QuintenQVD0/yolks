@@ -29,4 +29,4 @@ fi
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)
 
 # Run the Server
-node /wrapper.py "${MODIFIED_STARTUP}"
+python /wrapper.py "${MODIFIED_STARTUP}"
