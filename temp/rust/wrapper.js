@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-
 //var startupCmd = "";
 const fs = require("fs");
 fs.writeFile("latest.log", "", (err) => {
@@ -18,9 +17,9 @@ fs.writeFile("latest.log", "", (err) => {
 
 const args = process.argv.slice(2);
 const startupCmd = args.join(" "); // join the arguments with a space separator
-console.log(`Startup command: ${startupCmd}`);
+console.log(`Startup command: ${startupCmd}\n`);
 
-console.log(args.join(" "));
+//console.log(args.join(" "));
 
 console.log(startupCmd)
 if (startupCmd.length < 1) {
@@ -42,12 +41,13 @@ function filter(data) {
 	console.log(str);
 }
 
-var exec = require("child_process").exec;
+const { exec } = require('node:child_process');
 console.log("Starting Rust...");
-
+var bin = startupCmd.substring(0,15)
+var arr = startupCmd.slice(15);
 
 var exited = false;
-const gameProcess = exec(startupCmd);
+const gameProcess = exec(`"${bin}" ${arr}`);
 gameProcess.stdout.on('data', filter);
 gameProcess.stderr.on('data', filter);
 gameProcess.on('exit', function (code, signal) {
