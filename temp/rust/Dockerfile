@@ -6,7 +6,7 @@ ENV         DEBIAN_FRONTEND=noninteractive
 RUN			dpkg --add-architecture i386 \
 			&& apt update \
 			&& apt upgrade -y \
-			&& apt install -y lib32gcc-s1 lib32stdc++6 unzip curl iproute2 tzdata libgdiplus libsdl2-2.0-0:i386 tar \
+			&& apt install -y lib32gcc-s1 lib32stdc++6 unzip curl iproute2 tzdata libgdiplus libsdl2-2.0-0:i386 tar sqlite3 libsqlite3-0 \
 			&& useradd -d /home/container -m container
 
 
