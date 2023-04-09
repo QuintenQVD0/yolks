@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-var startupCmd = "";
+var startupCmd = [];
 const fs = require("fs");
 fs.writeFile("latest.log", "", (err) => {
 	if (err) console.log("Callback error in appendFile:" + err);
@@ -8,11 +8,7 @@ fs.writeFile("latest.log", "", (err) => {
 
 var args = process.argv.splice(process.execArgv.length + 2);
 for (var i = 0; i < args.length; i++) {
-	if (i === args.length - 1) {
-		startupCmd += args[i];
-	} else {
-		startupCmd += args[i] + " ";
-	}
+	startupCmd.push(args[i]);
 }
 
 if (startupCmd.length < 1) {
@@ -38,7 +34,7 @@ var exec = require("child_process").exec;
 console.log("Starting Rust...");
 
 var exited = false;
-const gameProcess = exec(startupCmd);
+const gameProcess = exec(startupCmd.join(' '));
 gameProcess.stdout.on('data', filter);
 gameProcess.stderr.on('data', filter);
 gameProcess.on('exit', function (code, signal) {
