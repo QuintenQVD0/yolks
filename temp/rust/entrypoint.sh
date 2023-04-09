@@ -12,9 +12,6 @@ else
     echo -e "Not updating game server as auto update was set to 0. Starting Server"
 fi
 
-# Replace Startup Variables
-MODIFIED_STARTUP=`eval echo $(echo ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g')`
-echo ":/home/container$ ${MODIFIED_STARTUP}"
 
 # OxideMod has been replaced with uMod
 if [ -f OXIDE_FLAG ] || [ "${OXIDE}" = 1 ] || [ "${UMOD}" = 1 ]; then
@@ -28,5 +25,9 @@ fi
 # Fix for Rust not starting
 export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$(pwd)
 
+# Replace Startup Variables
+MODIFIED_STARTUP=$(echo ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g')
+echo -e ":/home/container$ ${MODIFIED_STARTUP}"
+
 # Run the Server
-python /wrapper.py "${MODIFIED_STARTUP}"
+eval ${MODIFIED_STARTUP}
