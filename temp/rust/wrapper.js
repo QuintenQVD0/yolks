@@ -1,19 +1,26 @@
 #!/usr/bin/env node
 
-var startupCmd = "";
+
+//var startupCmd = "";
 const fs = require("fs");
 fs.writeFile("latest.log", "", (err) => {
 	if (err) console.log("Callback error in appendFile:" + err);
 });
 
-var args = process.argv.splice(process.execArgv.length + 2);
-for (var i = 0; i < args.length; i++) {
-	if (i === args.length - 1) {
-		startupCmd += args[i];
-	} else {
-		startupCmd += args[i] + " ";
-	}
-}
+//var args = process.argv.splice(process.execArgv.length + 2);
+//for (var i = 0; i < args.length; i++) {
+//	if (i === args.length - 1) {
+//		startupCmd += args[i];
+//	} else {
+//		startupCmd += args[i] + " ";
+//	}
+//}
+
+const args = process.argv.slice(2);
+const startupCmd = args.join(" "); // join the arguments with a space separator
+console.log(`Startup command: ${startupCmd}`);
+
+console.log(args.join(" "));
 
 console.log(startupCmd)
 if (startupCmd.length < 1) {
@@ -38,8 +45,9 @@ function filter(data) {
 var exec = require("child_process").exec;
 console.log("Starting Rust...");
 
+
 var exited = false;
-const gameProcess = exec(startupCmd.join(" "));
+const gameProcess = exec(startupCmd);
 gameProcess.stdout.on('data', filter);
 gameProcess.stderr.on('data', filter);
 gameProcess.on('exit', function (code, signal) {
