@@ -34,14 +34,13 @@ exited = False
 gameProcess = subprocess.Popen(startupCmd, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 def filter(data):
-    str = data.decode().strip()
-    if str.startswith("Loading Prefab Bundle "):
-        percentage = str[len("Loading Prefab Bundle "):]
-        if percentage in seenPercentage:
-            return
-        seenPercentage[percentage] = True
-    print(str.strip('"'), end="")
-
+    str = data.decode()
+    #if str.startswith("Loading Prefab Bundle "):
+    #    percentage = str[len("Loading Prefab Bundle "):]
+    #    if percentage in seenPercentage:
+    #        return
+    #    seenPercentage[percentage] = True
+    print(str)
 
 while True:
     data = gameProcess.stdout.readline()
