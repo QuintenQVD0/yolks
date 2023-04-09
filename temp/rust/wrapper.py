@@ -40,7 +40,7 @@ def filter(data):
         if percentage in seenPercentage:
             return
         seenPercentage[percentage] = True
-    print(str, end="")
+    print(str, end='')
 
 while True:
     data = gameProcess.stdout.readline()
@@ -153,7 +153,7 @@ def poll():
         global exited
         exited = True
         print("Received request to stop the process, stopping the game...")
-        os.killpg(os.getpgid(game_process.pid), signal.SIGTERM)
+        os.killpg(os.getpgid(gameProcess.pid), signal.SIGTERM)
         sys.exit()
     except Exception as e:
         traceback.print_exc()
