@@ -1,4 +1,4 @@
-FROM ubuntu:20.04
+FROM debian:bullseye-slim
 
 ENV   DEBIAN_FRONTEND noninteractive
 
@@ -6,10 +6,10 @@ ENV   DEBIAN_FRONTEND noninteractive
 RUN   useradd -m -d /home/container -s /bin/bash container
 
 
-RUN     apt update && apt -y install software-properties-common \
-        && add-apt-repository ppa:openjdk/ppa \
+RUN     apt update && apt -y install software-properties-common wget java-common libxtst6  \
+        && wget https://cdn.azul.com/zulu/bin/zulu7.56.0.11-ca-jdk7.0.352-linux_amd64.deb -O java.deb \
         && apt update \
-        && apt -y install openjdk-7 
+        && apt -y install zulu-7
 
 RUN     apt update \
         && apt -y install curl git iproute2 tar tzdata tar libssl1.1 
