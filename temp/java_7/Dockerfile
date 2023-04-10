@@ -6,7 +6,7 @@ ENV   DEBIAN_FRONTEND noninteractive
 RUN   useradd -m -d /home/container -s /bin/bash container
 
 
-RUN     apt update && apt -y install software-properties-common wget java-common libxtst6  \
+RUN     apt update && apt -y install software-properties-common wget java-common libxtst6 libasound2 libxrender1 libfontconfig1  \
         && wget https://cdn.azul.com/zulu/bin/zulu7.56.0.11-ca-jdk7.0.352-linux_amd64.deb -O java.deb \
         && dpkg -i java.deb \
         && rm java.deb \
