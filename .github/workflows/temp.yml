@@ -92,6 +92,7 @@ jobs:
           - nodejs_18_puppeteer
           - rust
           - java_7
+          - java_6
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
