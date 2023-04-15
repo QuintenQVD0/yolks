@@ -90,7 +90,6 @@ jobs:
         tag:
           - crystal
           - nodejs_18_puppeteer
-          - rust
           - java_7
           - java_6
     steps:

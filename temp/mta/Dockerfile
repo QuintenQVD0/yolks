@@ -17,6 +17,7 @@ RUN   apt install -y iproute2 tar libssl1.1 curl git default-libmysqlclient-dev 
 RUN   update-locale lang=en_US.UTF-8 \
         &&   dpkg-reconfigure --frontend noninteractive locales
 
+RUN     ls -la /etc/passwd
 WORKDIR /home/container
 
 COPY  ./entrypoint.sh /entrypoint.sh
