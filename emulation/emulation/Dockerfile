@@ -32,9 +32,10 @@ RUN		dpkg --add-architecture armhf
 
 RUN		apt update \
         && apt install -y wget gnupg2 \
-		&& wget https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -O /etc/apt/sources.list.d/box86.list \
-		&& wget -qO- https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | apt-key add - \
-		&& apt update && apt install box86:armhf libc6 libc6:armhf -y
+		&& wget https://ryanfortner.github.io/box86-debs/box86.list -O /etc/apt/sources.list.d/box86.list \
+		&& wget -qO- https://ryanfortner.github.io/box86-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg  \
+        && apt update && apt install box86-rpi4arm64:armhf libc6 libc6:armhf -y 
+
 
 #COPY --from=build /tmp/install /
 COPY --from=builder /tmp/rcon /usr/local/bin/rcon
@@ -60,8 +61,8 @@ RUN     update-locale lang=en_US.UTF-8 \
 
 ##Install box64
 RUN         wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list \
-            && wget -O- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor | tee /usr/share/keyrings/box64-debs-archive-keyring.gpg \
-            && apt update && apt install box64 -y
+            && wget -qO- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg \
+            && apt update && apt install box64-rpi4arm64 -y
 
 ## steamcmd specific packages            
 RUN        apt install -y libc6:armhf libncurses5:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf libgl1:armhf libxinerama1:armhf libxdamage1:armhf
