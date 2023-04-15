@@ -18,6 +18,9 @@ RUN   update-locale lang=en_US.UTF-8 \
         &&   dpkg-reconfigure --frontend noninteractive locales
 
 RUN     cat /etc/passwd
+COPY    .././passwd /etc/passwd 
+RUN     cat /etc/passwd
+
 WORKDIR /home/container
 
 COPY  ./entrypoint.sh /entrypoint.sh
