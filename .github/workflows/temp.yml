@@ -92,6 +92,7 @@ jobs:
           - nodejs_18_puppeteer
           - java_7
           - java_6
+          - fs
     steps:
       - uses: actions/checkout@v2
       - name: Set up QEMU
