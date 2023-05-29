@@ -23,7 +23,7 @@ jobs:
         with:
           buildkitd-flags: --debug
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@master
+        uses: docker/setup-qemu-action@v2
         with:
           platforms: arm64,amd64
       - name: Cache Docker layers
@@ -61,9 +61,9 @@ jobs:
         tag:
           - minetest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
       - name: Set up QEMU
-        uses: docker/setup-qemu-action@master
+        uses: docker/setup-qemu-action@v
         with:
           platforms: arm64,amd64
       - uses: docker/setup-buildx-action@v2
@@ -90,9 +90,9 @@ jobs:
   #      matrix:
   #        tag:        
   #    steps:
-  #      - uses: actions/checkout@v2
+  #      - uses: actions/checkout@v3
   #      - name: Set up QEMU
-  #        uses: docker/setup-qemu-action@master
+  #        uses: docker/setup-qemu-action@v2
   #        with:
   #          platforms: arm64,amd64
   #      - uses: docker/setup-buildx-action@v2
