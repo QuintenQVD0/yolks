@@ -60,13 +60,12 @@ MODIFIED_STARTUP=$(echo ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g')
 echo ":/home/container$ ${MODIFIED_STARTUP}"
 
 
-socat TCP-LISTEN:${FS_WEB_PORT},fork,reuseaddr TCP:0.0.0.0:${FS_WEB_PORT} &
-socat UDP-LISTEN:${FS_WEB_PORT},fork,reuseaddr UDP:0.0.0.0:${FS_WEB_PORT} &
+socat TCP-LISTEN:${FS_WEB_PORT},fork,reuseaddr TCP:0.0.0.0:${FS_PORT}} &
+#socat UDP-LISTEN:${FS_WEB_PORT},fork,reuseaddr UDP:0.0.0.0:${FS_WEB_PORT} &
 
-sleep 3
 
-socat TCP-LISTEN:${FS_PORT},fork,reuseaddr TCP:0.0.0.0:${FS_PORT} &
-socat UDP-LISTEN:${FS_PORT},fork,reuseaddr UDP:0.0.0.0:${FS_PORT} &
+#socat TCP-LISTEN:${FS_PORT},fork,reuseaddr TCP:0.0.0.0:${FS_PORT} &
+#socat UDP-LISTEN:${FS_PORT},fork,reuseaddr UDP:0.0.0.0:${FS_PORT} &
 
 sleep 3
 
