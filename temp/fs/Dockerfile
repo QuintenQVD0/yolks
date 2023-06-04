@@ -5,7 +5,7 @@ LABEL       author="QuintenQVD" maintainer="josdekurk@gmail.com"
 ## install required packages
 RUN     dpkg --add-architecture i386 \
         && apt update -y \
-        && apt install -y --no-install-recommends gnupg2 tzdata software-properties-common libntlm0 winbind xvfb xauth python3 socat
+        && apt install -y --no-install-recommends gnupg2 tzdata software-properties-common libntlm0 winbind xvfb xauth python3 socat python3-pip
 # Install winehq-stable and with recommends
 RUN     wget -nc https://dl.winehq.org/wine-builds/winehq.key \
         && apt-key add winehq.key \
