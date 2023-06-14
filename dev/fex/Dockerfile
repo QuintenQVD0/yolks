@@ -26,9 +26,14 @@ RUN     apt update && apt -y install software-properties-common \
         && apt update \
         && apt -y install fex-emu-armv8.2 fex-emu-binfmt32 fex-emu-binfmt64
 
-RUN     echo "deb http://security.ubuntu.com/ubuntu focal-security main" | tee /etc/apt/sources.list.d/focal-security.list \
-		&& apt update \ 
-        && apt -y install curl git iproute2 libssl-dev squashfuse fuse squashfs-tools tzdata tar libssl1.1 zip unzip \
+RUN		apt update \ 
+        && apt -y install curl git iproute2 libssl-dev squashfuse fuse squashfs-tools tzdata tar wget zip build-essential unzip \
+		&& cd /usr/src/ && wget https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1t/openssl-1.1.1t.tar.gz \
+  		&& tar xvf openssl-1.1.1t.tar.gz \
+		&& cd openssl-1.1.1t/ \
+  		&& ./config \
+		&& make \
+  		&& make install && rm -rf /usr/src \
         && ls -la /usr/local/bin
 
 WORKDIR /home/container
