@@ -12,6 +12,18 @@
 #         && ninja \
 #         && ls -la /usr/src/FEX/Build/Bin
 
+FROM --platform=linux/arm64 ubuntu:22.04 as builder
+ENV   DEBIAN_FRONTEND noninteractive
+
+RUN 	apt update \
+		&& apt install -y curl wget build-essential tar
+
+RUN 	cd /usr/src/ && wget https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1t/openssl-1.1.1t.tar.gz \
+  		&& tar xvf openssl-1.1.1t.tar.gz \
+		&& cd openssl-1.1.1t/ \
+  		&& ./config \
+		&& make
+
 FROM --platform=linux/arm64 ubuntu:22.04
 
 ENV   DEBIAN_FRONTEND noninteractive
@@ -28,13 +40,10 @@ RUN     apt update && apt -y install software-properties-common \
 
 RUN		apt update \ 
         && apt -y install curl git iproute2 libssl-dev squashfuse fuse squashfs-tools tzdata tar wget zip build-essential unzip \
-		&& cd /usr/src/ && wget https://github.com/openssl/openssl/releases/download/OpenSSL_1_1_1t/openssl-1.1.1t.tar.gz \
-  		&& tar xvf openssl-1.1.1t.tar.gz \
-		&& cd openssl-1.1.1t/ \
-  		&& ./config \
-		&& make \
-  		&& make install && rm -rf /usr/src \
         && ls -la /usr/local/bin
+
+COPY --from=builder /usr/src/openssl-1.1.1t /usr/src/
+RUN		ls -la /usr/src
 
 WORKDIR /home/container
 
