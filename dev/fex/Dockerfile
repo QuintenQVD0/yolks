@@ -12,7 +12,7 @@
 #         && ninja \
 #         && ls -la /usr/src/FEX/Build/Bin
 
-FROM --platform=linux/arm64 ubuntu:20.04
+FROM --platform=linux/arm64 ubuntu:22.04
 
 ENV   DEBIAN_FRONTEND noninteractive
 
@@ -26,8 +26,9 @@ RUN     apt update && apt -y install software-properties-common \
         && apt update \
         && apt -y install fex-emu-armv8.2 fex-emu-binfmt32 fex-emu-binfmt64
 
-RUN     apt update \
-        && apt -y install curl git iproute2 libssl-dev squashfuse squashfs-tools tzdata tar libssl1.1 \
+RUN     echo "deb http://security.ubuntu.com/ubuntu focal-security main" | sudo tee /etc/apt/sources.list.d/focal-security.list \
+		&& apt update \ 
+        && apt -y install curl git iproute2 libssl-dev squashfuse fuse squashfs-tools tzdata tar libssl1.1 zip unzip \
         && ls -la /usr/local/bin
 
 WORKDIR /home/container
