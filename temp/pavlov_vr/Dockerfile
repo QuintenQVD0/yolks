@@ -15,6 +15,8 @@ RUN         dpkg --add-architecture i386 \
 
 RUN 		useradd -d /home/container -m container
 
+RUN			rm /usr/lib/x86_64-linux-gnu/libc++.so  \
+			&& ln -s /usr/lib/x86_64-linux-gnu/libc++.so.1 /usr/lib/x86_64-linux-gnu/libc++.so
 ## install rcon
 RUN         cd /tmp/ \
             && curl -sSL https://github.com/gorcon/rcon-cli/releases/download/v0.10.3/rcon-0.10.3-amd64_linux.tar.gz > rcon.tar.gz \
