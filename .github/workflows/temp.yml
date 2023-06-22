@@ -92,7 +92,7 @@ jobs:
           - nodejs_18_puppeteer
           - java_7
           - java_6
-          - fs
+          - pavlov_vr
     steps:
       - uses: actions/checkout@v3
       - name: Set up QEMU
