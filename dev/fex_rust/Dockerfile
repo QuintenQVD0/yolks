@@ -15,8 +15,12 @@ RUN		apt update \
         && apt -y install curl git iproute2 libssl-dev squashfuse fuse squashfs-tools tzdata tar wget zip build-essential unzip \
 		&& wget http://launchpadlibrarian.net/668077130/libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
   		&& dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
-        && ls -la /usr/local/bin
-
+        && ls -la /usr/local/bin \
+		&& curl -sL https://deb.nodesource.com/setup_14.x | bash - \
+		&& apt install -y nodejs \
+		&& mkdir /node_modules \
+		&& npm install --prefix / ws 
+  
 WORKDIR /home/container
 
 COPY 		./wrapper.js /wrapper.js
