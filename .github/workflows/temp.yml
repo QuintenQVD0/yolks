@@ -57,9 +57,7 @@ jobs:
          tag:
            - nodejs_16_dotnet_7
            - nodejs_16_dotnet_6
-           - bastion
            - mta
-           - sinusbot
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
@@ -93,6 +91,7 @@ jobs:
           - java_7
           - java_6
           - pavlov_vr
+          - fivem
     steps:
       - uses: actions/checkout@v3
       - name: Set up QEMU
