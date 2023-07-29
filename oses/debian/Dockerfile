@@ -23,7 +23,6 @@ RUN          apt install -y gcc g++ libgcc1 libc++-dev gdb libc6 git wget curl t
 RUN          update-locale lang=en_US.UTF-8 \
              && dpkg-reconfigure --frontend noninteractive locales
 
-
 WORKDIR     /home/container
 
 COPY        ./entrypoint.sh /entrypoint.sh

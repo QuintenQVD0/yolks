@@ -58,6 +58,7 @@ jobs:
            - nodejs_16_dotnet_7
            - nodejs_16_dotnet_6
            - mta
+           - installer_debian
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
