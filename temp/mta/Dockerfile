@@ -17,9 +17,7 @@ RUN   apt install -y iproute2 tar libssl1.1 curl git default-libmysqlclient-dev 
 RUN   update-locale lang=en_US.UTF-8 \
         &&   dpkg-reconfigure --frontend noninteractive locales
 
-RUN     cat /etc/passwd
 COPY    ./passwd /etc/passwd 
-RUN     cat /etc/passwd
 
 WORKDIR /home/container
 
