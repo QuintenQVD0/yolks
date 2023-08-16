@@ -9,7 +9,7 @@ RUN   useradd -m -d /home/container -s /bin/bash container
 RUN     apt update && apt -y install software-properties-common \
         && add-apt-repository ppa:fex-emu/fex \
         && apt update \
-        && apt -y install fex-emu-armv8.2 fex-emu-binfmt32 fex-emu-binfmt64
+        && apt -y install fex-emu-armv8.0 fex-emu-binfmt32 fex-emu-binfmt64
 
 RUN	apt update \ 
         && apt -y install curl git iproute2 libssl-dev squashfuse fuse squashfs-tools tzdata tar wget zip build-essential unzip gdb libnss-wrapper gettext \
