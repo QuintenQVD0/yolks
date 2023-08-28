@@ -60,6 +60,7 @@ jobs:
            - mta
            - installer_debian
            - memcached
+           - redis_7_2
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
