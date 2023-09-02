@@ -26,12 +26,6 @@ else
     exit 0
 fi
 
-# Setup NSS Wrapper for use ($NSS_WRAPPER_PASSWD and $NSS_WRAPPER_GROUP have been set by the Dockerfile)
-export USER_ID=$(id -u)
-export GROUP_ID=$(id -g)
-envsubst < /passwd.template > ${NSS_WRAPPER_PASSWD}
-
-export LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libnss_wrapper.so
 
 export FEX_APP_DATA_LOCATION=/home/container/rootfs/
 export FEX_APP_CONFIG_LOCATION=/home/container/
