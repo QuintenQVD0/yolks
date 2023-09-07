@@ -6,7 +6,7 @@ RUN         apt update \
             && apt -y install ffmpeg iproute2 git sqlite3 libsqlite3-dev python3 python3-dev ca-certificates dnsutils tzdata zip tar curl build-essential libtool \
             && useradd -m -d /home/container container
 
-RUN         npm install npm@latest -g
+RUN         npm install npm@9.8.1 -g
 
 RUN         apt update \
 			&& apt -y install curl tar bzip2 file wget\

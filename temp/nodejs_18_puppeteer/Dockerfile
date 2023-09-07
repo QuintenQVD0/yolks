@@ -14,7 +14,7 @@ RUN apt-get update \
 
 RUN         apt update \
             && apt -y install ffmpeg iproute2 git sqlite3 libsqlite3-dev python3 python3-dev ca-certificates dnsutils tzdata zip tar curl build-essential wget apt-transport-https lsb-release libtool \
-            && npm -g install npm@latest 
+            && npm -g install npm@9.8.1 
 
 RUN		echo "deb https://notesalexp.org/tesseract-ocr5/$(lsb_release -cs)/ $(lsb_release -cs) main" | tee /etc/apt/sources.list.d/notesalexp.list > /dev/null \
 		&& wget -O - https://notesalexp.org/debian/alexp_key.asc | apt-key add - \
