@@ -24,7 +24,7 @@ RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.co
 
 # Install a steam client
 RUN             curl -sSL -o steam.deb https://repo.steampowered.com/steam/archive/precise/steam_latest.deb \
-                && apt -y install xterm gnome-terminal konsole zenity \
+                && apt -y install xterm gnome-terminal konsole zenity file \
                 && dpkg -i steam.deb
 
 ENV             HOME=/home/container
