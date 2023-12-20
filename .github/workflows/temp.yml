@@ -58,7 +58,6 @@ jobs:
            - nodejs_16_dotnet_7
            - nodejs_16_dotnet_6
            - mta
-           - redis_7_2
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
@@ -90,8 +89,6 @@ jobs:
           - nodejs_18_puppeteer
           - pavlov_vr
           - rathena
-          - steamcmd
-          - wine
     steps:
       - uses: actions/checkout@v3
       - name: Set up QEMU
