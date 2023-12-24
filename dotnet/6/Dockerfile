@@ -12,7 +12,7 @@ RUN         apt update \
 			&& ./dotnet-install.sh -i /usr/share -v $D_V \
 			&& ln -s /usr/share/dotnet /usr/bin/dotnet \
 			&& apt -y install ffmpeg wget iproute2 git ca-certificates tzdata zip tar libtool \
-			&& apt -y install libc6 libgcc1 libgssapi-krb5-2 libicu67 libssl1.1 libstdc++6 zlib1g libsdl2-2.0-0 libsdl2-dev \
+			&& apt -y install libc6 libgcc1 libgssapi-krb5-2 libicu67 libssl1.1 libstdc++6 zlib1g libsdl2-2.0-0 libsdl2-dev tini \
 			&& apt update -y \
 			&& dotnet --version \
             && useradd -m -d /home/container container
@@ -21,5 +21,9 @@ USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
 
-COPY   		 ./../entrypoint.sh /entrypoint.sh
-CMD 		["/bin/bash", "/entrypoint.sh"] 
+STOPSIGNAL SIGINT
+
+COPY        --chown=container:container ./../entrypoint.sh /entrypoint.sh
+RUN         chmod +x /entrypoint.sh
+ENTRYPOINT    ["/usr/bin/tini", "-g", "--"]
+CMD         ["/entrypoint.sh"]
