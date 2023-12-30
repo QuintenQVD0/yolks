@@ -89,6 +89,7 @@ jobs:
           - nodejs_18_puppeteer
           - pavlov_vr
           - rathena
+          - proton
     steps:
       - uses: actions/checkout@v3
       - name: Set up QEMU
