@@ -2,8 +2,21 @@ FROM --platform=linux/arm64 ubuntu:22.04
 
 ENV   DEBIAN_FRONTEND noninteractive
 
+FROM --platform=linux/arm64 golang:1.19.3-bullseye as builder
+
+RUN 	apt update \
+		&& apt install -y git curl gcc musl-dev
+
+RUN 	git clone https://github.com/gorcon/rcon-cli.git \
+		&& cd rcon-cli/ \
+		&& go get -v -t -d ./... \
+		&& CGO_ENABLED=1 go build -ldflags "-s -w -X main.ServiceVersion=docker" -v ./cmd/gorcon \
+		&& mv gorcon /tmp/rcon
+
 ## add container user
 RUN   useradd -m -d /home/container -s /bin/bash container
+
+COPY --from=builder /tmp/rcon /usr/local/bin/rcon
 
 RUN     apt update && apt -y install software-properties-common \
         && add-apt-repository ppa:fex-emu/fex \
