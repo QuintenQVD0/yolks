@@ -19,6 +19,7 @@ jobs:
           - box64
           - box86
           - emulation
+          - proton
     steps:
       - uses: actions/checkout@v3
       - uses: docker/setup-qemu-action@v2
