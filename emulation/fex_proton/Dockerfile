@@ -34,7 +34,6 @@ RUN         apt update
 RUN         apt install -y --no-install-recommends software-properties-common libntlm0 winbind xauth libncurses6 dbus libgdiplus
 RUN         apt install -y alsa-tools pulseaudio libasound2 libao-common gnutls-bin gnupg numactl curl python3 python3-pip python3-setuptools
 
-RUN         useradd -d /home/container -m container
 COPY --from=builder /tmp/rcon /usr/local/bin/rcon
 
 # Download Proton GE
