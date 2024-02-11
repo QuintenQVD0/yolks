@@ -3,6 +3,9 @@ FROM            ghcr.io/parkervcp/yolks:wine_latest@sha256:db82ec2e67fe90d7d6650
 
 ## install required packages
 RUN             dpkg --add-architecture i386 \
+                && apt-mark hold winehq-stable \
+                && apt-mark hold wine-stable-amd64 \
+                && apt-mark hold wine-stable \
                 && apt update -y \
 				&& apt upgrade -y \
                 && rm /usr/sbin/winetricks /entrypoint.sh
