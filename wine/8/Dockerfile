@@ -16,7 +16,10 @@ RUN             mkdir -pm755 /etc/apt/keyrings
 RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
 RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bullseye/winehq-bullseye.sources
 RUN             apt update
-RUN             apt install --install-recommends wine-stable-amd64=8.0.2~bullseye-1 wine-stable-amd64=8.0.2~bullseye-1 wine-stable-i386=8.0.2~bullseye-1 cabextract wine-binfmt -y
+RUN             wget -O winehq-stable_8.0.2.deb https://dl.winehq.org/wine-builds/debian/dists/bullseye/main/binary-amd64/winehq-stable_8.0.2~bullseye-1_amd64.deb \
+                && dpkg -i winehq-stable_8.0.2.deb \
+                && wine --version
+RUN             apt install --install-recommends cabextract wine-binfmt -y
 
 # Set up Winetricks
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
