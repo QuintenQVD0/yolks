@@ -24,6 +24,15 @@ else
     export FEX_APP_DATA_LOCATION=${FEX_ROOTFS_PATH}; export FEX_APP_CONFIG_LOCATION=/home/container/; export XDG_DATA_HOME=/home/container; FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=20.04
 fi
 
+# Generate Config.json if the RootFS is in a mount
+if [ -f "/home/container/rootfs/Ubuntu_20_04/break_chroot.sh" ] || [ -f "${FEX_ROOTFS_PATH}/RootFS/Ubuntu_20_04/break_chroot.sh" ]
+then
+    if [ ! -f "/home/container/Config.json" ]
+    then
+        echo '{"Config":{"RootFS":"Ubuntu_20_04"}}' > /home/container/Config.json
+    fi
+fi
+
 sleep 2
 
 if [ -f "/home/container/Config.json" ]; then
