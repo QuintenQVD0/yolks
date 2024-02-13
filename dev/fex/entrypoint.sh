@@ -16,7 +16,7 @@ else
     echo "Custom RootFS PATH"
 fi
 
-if [ -d "${FEX_ROOTFS_PATH}" ] ||[ -d "${FEX_ROOTFS_PATH}/RootFS" ]
+if [ -d "/home/container/rootfs/" ] ||[ -d "${FEX_ROOTFS_PATH}/RootFS" ]
 then
     echo "RootFS already downloaded"	 
 else
