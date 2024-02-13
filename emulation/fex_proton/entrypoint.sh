@@ -10,13 +10,13 @@ MODIFIED_STARTUP=$(echo -e ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g')
 echo -e ":/home/container$ ${MODIFIED_STARTUP}"
 
 if [ -z "${FEX_ROOTFS_PATH}" ]; then
-    echo "VAR is unset or set to the empty string"
+    echo "Setting Default RootFS PATH"
     export FEX_ROOTFS_PATH=/home/container/rootfs/
 else
-    echo "VAR is set to some string"
+    echo "Custom RootFS PATH"
 fi
 
-if [ -d "/home/container/rootfs" ]
+if [ -d "${FEX_ROOTFS_PATH}" ] ||[ -d "${FEX_ROOTFS_PATH}/RootFS" ]
 then
     echo "RootFS already downloaded"	 
 else

@@ -9,12 +9,19 @@ export INTERNAL_IP
 MODIFIED_STARTUP=$(echo -e ${STARTUP} | sed -e 's/{{/${/g' -e 's/}}/}/g')
 echo -e ":/home/container$ ${MODIFIED_STARTUP}"
 
-if [ -d "/home/container/rootfs" ]
+if [ -z "${FEX_ROOTFS_PATH}" ]; then
+    echo "Setting Default RootFS PATH"
+    export FEX_ROOTFS_PATH=/home/container/rootfs/
+else
+    echo "Custom RootFS PATH"
+fi
+
+if [ -d "${FEX_ROOTFS_PATH}" ] ||[ -d "${FEX_ROOTFS_PATH}/RootFS" ]
 then
     echo "RootFS already downloaded"	 
 else
     echo -e "\nThis server will need at least 9GB of disk space!"
-    export FEX_APP_DATA_LOCATION=/home/container/rootfs/; export FEX_APP_CONFIG_LOCATION=/home/container/; export XDG_DATA_HOME=/home/container; FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=20.04
+    export FEX_APP_DATA_LOCATION=${FEX_ROOTFS_PATH}; export FEX_APP_CONFIG_LOCATION=/home/container/; export XDG_DATA_HOME=/home/container; FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=20.04
 fi
 
 sleep 2
@@ -26,7 +33,7 @@ else
     exit 0
 fi
 
-export FEX_APP_DATA_LOCATION=/home/container/rootfs/
+export FEX_APP_DATA_LOCATION=${FEX_ROOTFS_PATH}
 export FEX_APP_CONFIG_LOCATION=/home/container/
 export XDG_DATA_HOME=/home/container
 
