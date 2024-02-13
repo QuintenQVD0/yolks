@@ -9,7 +9,7 @@ on:
 
 jobs:
   pushArm:
-      name: "yolks:tempARM_${{ matrix.tag }}"
+      name: "yolks:dev:${{ matrix.tag }}"
       runs-on: ubuntu-latest
       strategy:
         fail-fast: false
