@@ -3,7 +3,7 @@ FROM        --platform=$TARGETOS/$TARGETARCH python:3.11-slim
 LABEL       author="Michael Parker" maintainer="parker@pterodactyl.io"
 
 RUN         apt update \
-            && apt -y install git gcc g++ ca-certificates dnsutils curl iproute2 ffmpeg procps tini wget gnupg \
+            && apt -y install git gcc g++ ca-certificates dnsutils curl iproute2 ffmpeg procps tini wget gnupg aptitude \
             && useradd -m -d /home/container container
 
 RUN         apt install apt-transport-https \
