@@ -10,7 +10,7 @@ RUN         apt install apt-transport-https \
             && echo "deb https://notesalexp.org/tesseract-ocr5/bookworm/ bookworm main" >> /etc/apt/sources.list \
             && wget -O - https://notesalexp.org/debian/alexp_key.asc | apt-key add - \
             && apt-get update \
-            && aptitude install tesseract-ocr
+            && aptitude -y install tesseract-ocr
 
 USER        container
 ENV         USER=container HOME=/home/container
