@@ -59,6 +59,7 @@ jobs:
            - nodejs_16_dotnet_6
            - mta
            - node_21
+           - uptimekuma
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
