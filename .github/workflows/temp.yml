@@ -60,6 +60,7 @@ jobs:
            - mta
            - node_21
            - uptimekuma
+           - vueapp-nginx
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
