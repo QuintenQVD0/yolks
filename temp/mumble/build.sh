@@ -37,7 +37,6 @@ install_dep(){
         libxcb-xinerama0 \
         libzeroc-ice-dev \
         libpoco-dev \
-        g++-multilib \
         jq \
         python3 \
         curl \
@@ -48,6 +47,30 @@ install_dep(){
         exit 1
     fi
     log "Dependencies installed successfully"
+}
+
+# Function to install g++-multilib on amd64
+install_amd64_multilib() {
+    apt -y install g++-multilib
+
+    if [[ $? -ne 0 ]]; then
+        log "Failed to install amd multilib dependency"
+        exit 1
+    fi
+
+    log "Multilib AMD64 installed successfully"   
+}
+
+# Function to install multilib support on arm64
+install_arm64_multilib() {
+    apt -y install g++-multilib-x86-64-linux-gnu g++-aarch64-linux-gnu libc6-dev-armhf-cross
+    
+    if [[ $? -ne 0 ]]; then
+        log "Failed to install amd multilib dependency"
+        exit 1
+    fi
+
+    log "Multilib ARM64 installed successfully"   
 }
 
 clone_mumble(){
@@ -110,6 +133,23 @@ build_mumble(){
     log "Build completed successfully"
 }
 
+# Install normal deps
 install_dep
+
+# Detect the architecture
+ARCH=$(dpkg --print-architecture)
+
+# Install ARCH specific deps
+if [ "$ARCH" = "amd64" ]; then
+    echo "Detected architecture: amd64"
+    install_amd64_multilib
+elif [ "$ARCH" = "arm64" ]; then
+    echo "Detected architecture: arm64"
+    install_arm64_multilib
+else
+    echo "Unsupported architecture: $ARCH"
+    exit 1
+fi
+
 clone_mumble
 build_mumble
