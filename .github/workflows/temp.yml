@@ -61,7 +61,6 @@ jobs:
            - node_21
            - uptimekuma
            - vueapp-nginx
-           - mumble
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
@@ -97,6 +96,7 @@ jobs:
           - "472942239040012288"
           - python_311_ocr
           - "arma3"
+          - mumble
     steps:
       - uses: actions/checkout@v3
       - name: Set up QEMU
