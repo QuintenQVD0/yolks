@@ -61,6 +61,7 @@ jobs:
            - node_21
            - uptimekuma
            - vueapp-nginx
+           - mumble
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
