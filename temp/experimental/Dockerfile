@@ -9,7 +9,7 @@ RUN useradd -m -d /home/container -s /bin/bash container
 ## install required packages
 RUN             dpkg --add-architecture i386 \
                 && apt update -y \
-                && apt install -y --no-install-recommends gnupg2 wget numactl tzdata software-properties-common libntlm0 winbind xvfb xauth python3 libncurses5:i386 libncurses6:i386 libsdl2-2.0-0 libsdl2-2.0-0:i386 tightvncserver nginx xfonts-base
+                && apt install -y --no-install-recommends gnupg2 wget numactl tzdata software-properties-common libntlm0 winbind xvfb xauth python3 libncurses5:i386 libncurses6:i386 libsdl2-2.0-0 libsdl2-2.0-0:i386 tightvncserver nginx xfonts-base debian-keyring debian-archive-keyring apt-transport-https curl
 
 
 # Install wine staging
@@ -23,6 +23,13 @@ RUN             rm -rf /var/lib/apt/lists/*
 # Set up Winetricks
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
+
+# Setup caddy for the internal web server
+
+RUN             curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
+RUN             curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
+RUN             apt update && apt -y install caddy
+       
 
 USER        container
 ENV         USER=container HOME=/home/container
