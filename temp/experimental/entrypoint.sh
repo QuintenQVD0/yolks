@@ -61,8 +61,8 @@ fi
 if [ "${PROGRESSION}" == "MOVE_MOUNT_FILES" ]; then
     # Move the mounted game and server files to the correct directory
     echo "Moving mounted game and server files..."
-    #cp /fs /home/container/Farming\ Simulator\ 2022/
-    mv /fs /home/container/Farming\ Simulator\ 2022/
+    #cp -r /fs/* /home/container/Farming\ Simulator\ 2022/
+    mv /fs/* /home/container/Farming\ Simulator\ 2022/
     elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
     # Set up VNC configuration if it doesn't already exist
     echo "Setting up VNC configuration..."
