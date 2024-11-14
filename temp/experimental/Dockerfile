@@ -24,13 +24,9 @@ RUN             rm -rf /var/lib/apt/lists/*
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
 
-# Setup caddy for the internal web server
-
-RUN             curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/gpg.key' | gpg --dearmor -o /usr/share/keyrings/caddy-stable-archive-keyring.gpg
-RUN             curl -1sLf 'https://dl.cloudsmith.io/public/caddy/stable/debian.deb.txt' | tee /etc/apt/sources.list.d/caddy-stable.list
-RUN             apt update && apt -y install caddy
        
-
+ENV         WINEPREFIX=/home/container/.wine
+ENV         WINEDLLOVERRIDES="mscoree,mshtml="
 USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
