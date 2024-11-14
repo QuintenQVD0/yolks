@@ -11,6 +11,7 @@ export DISPLAY=":1"
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
+export WINEPREFIX=/home/container/.wine
 
 if [ -f "/home/container/.vnc/passwd" ]; then
     echo "Needed VNC files already there"
