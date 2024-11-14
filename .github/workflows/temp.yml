@@ -55,13 +55,8 @@ jobs:
        fail-fast: false
        matrix:
          tag:
-           - nodejs_16_dotnet_7
-           - nodejs_16_dotnet_6
            - mta
-           - node_21
-           - uptimekuma
            - vueapp-nginx
-           - mumble
      steps:
        - uses: actions/checkout@v3
        - name: Set up QEMU
@@ -93,10 +88,9 @@ jobs:
           - nodejs_18_puppeteer
           - pavlov_vr
           - rathena
-          - proton
           - "472942239040012288"
           - python_311_ocr
-          - "arma3"
+          - "experimental"
     steps:
       - uses: actions/checkout@v3
       - name: Set up QEMU
