@@ -54,3 +54,5 @@ echo ":/home/container$ ${MODIFIED_STARTUP}"
 # start vnc server
 /usr/bin/vncserver -geometry 1920x1080 -rfbport ${VNC_PORT} -rfbauth /home/container/.vnc/passwd 
 
+# Run the Server
+eval ${MODIFIED_STARTUP}
