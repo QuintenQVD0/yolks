@@ -78,6 +78,7 @@ elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
         echo "export DISPLAY=${DISPLAY}" >> /home/container/.vnc/xstartup
         echo "[ -r /home/container/.Xresources ] && xrdb /home/container/.Xresources" >> /home/container/.vnc/xstartup
         echo "xsetroot -solid grey" >> /home/container/.vnc/xstartup
+        chmod 755 /home/container/.vnc/xstartup
     fi
     echo "Please stop the server and set the PROGRESSION variable to ACTIVATE"
     STARTCMD="sleep 20"
@@ -91,6 +92,7 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd 
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
 
 else
