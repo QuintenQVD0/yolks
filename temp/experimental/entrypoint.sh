@@ -56,12 +56,20 @@ if [[ -d /tmp/.X11-unix ]]; then
 fi
 
 # Handle various progression states
-if [ "${PROGRESSION}" == "MOVE_MOUNT_FILES" ]; then
+if [ "${PROGRESSION}" == "MOVE_SEVRER_FILES" ]; then
     # Move the mounted game and server files to the correct directory
     echo "Moving mounted game and server files..., This can take a wile"
     mkdir -p /home/container/Farming\ Simulator\ 2022/
-    #cp -r /fs/* /home/container/Farming\ Simulator\ 2022/
     mv /fs/* /home/container/Farming\ Simulator\ 2022/
+    echo "Please stop the server and set the PROGRESSION variable to SETUP_VNC"
+    STARTCMD="sleep 20"
+
+if [ "${PROGRESSION}" == "COPPY_SERVER_FILES" ]; then
+    # Move the mounted game and server files to the correct directory
+    echo "Moving mounted game and server files..., This can take a wile"
+    mkdir -p /home/container/Farming\ Simulator\ 2022/
+    
+    cp -r -f /fs/* /home/container/Farming\ Simulator\ 2022/
     echo "Please stop the server and set the PROGRESSION variable to SETUP_VNC"
     STARTCMD="sleep 20"
 
