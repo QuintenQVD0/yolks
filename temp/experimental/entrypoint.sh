@@ -10,7 +10,6 @@ echo "Wine version: $(wine --version)"
 export DISPLAY=":1"
 
 # Make internal Docker IP address available to processes
-echo "Setting internal Docker IP address..."
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
@@ -40,7 +39,6 @@ if [[ $WINETRICKS_RUN =~ mono ]]; then
 fi
 
 # Install additional Winetricks
-echo "Installing Winetricks packages..."
 for trick in $WINETRICKS_RUN; do
     echo "Installing Winetrick: $trick"
     winetricks -q "$trick"
@@ -60,7 +58,8 @@ fi
 # Handle various progression states
 if [ "${PROGRESSION}" == "MOVE_MOUNT_FILES" ]; then
     # Move the mounted game and server files to the correct directory
-    echo "Moving mounted game and server files..."
+    echo "Moving mounted game and server files..., This can take a wile"
+    mkdir -p /home/container/Farming\ Simulator\ 2022/
     #cp -r /fs/* /home/container/Farming\ Simulator\ 2022/
     mv /fs/* /home/container/Farming\ Simulator\ 2022/
     echo "Please stop the server and set the PROGRESSION variable to SETUP_VNC"
