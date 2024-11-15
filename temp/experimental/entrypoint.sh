@@ -64,7 +64,7 @@ if [ "${PROGRESSION}" == "MOVE_SEVRER_FILES" ]; then
     echo "Please stop the server and set the PROGRESSION variable to SETUP_VNC"
     STARTCMD="sleep 20"
 
-if [ "${PROGRESSION}" == "COPY_SERVER_FILES" ]; then
+elif [ "${PROGRESSION}" == "COPY_SERVER_FILES" ]; then
     # Move the mounted game and server files to the correct directory
     echo "Moving mounted game and server files..., This can take a wile"
     mkdir -p /home/container/Farming\ Simulator\ 2022/
@@ -104,6 +104,8 @@ else
     # Unrecognized progression state
     echo "Error: The PROGRESSION variable is set to an unknown value."
     exit 1
+
+    STARTCMD="sleep 50"
 fi
 
 # Echo the final startup command
