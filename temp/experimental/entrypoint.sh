@@ -75,9 +75,6 @@ elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
         wget https://raw.githubusercontent.com/QuintenQVD0/yolks/refs/heads/master/temp/experimental/xstartup
         touch /home/container/.vnc/passwd /home/container/.Xauthority
         chmod 600 /home/container/.vnc/passwd
-        echo "export DISPLAY=${DISPLAY}" >> /home/container/.vnc/xstartup
-        echo "[ -r /home/container/.Xresources ] && xrdb /home/container/.Xresources" >> /home/container/.vnc/xstartup
-        echo "xsetroot -solid grey" >> /home/container/.vnc/xstartup
         chmod 755 /home/container/.vnc/xstartup
     fi
     echo "Please stop the server and set the PROGRESSION variable to ACTIVATE"
