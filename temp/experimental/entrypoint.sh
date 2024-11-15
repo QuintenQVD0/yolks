@@ -58,8 +58,16 @@ fi
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-    STARTCMD="wine /fs/FarmingSimulator2022.exe"
-elif [ "${PROGRESSION}" == "INSTALL_DLC" ]; then
+     # Check if the directory is writable and the file exists
+    if [ -w "/fs" ] && [ -f "fs/FarmingSimulator2022.exe" ]; then
+        echo "You have write permission to the /fs directory and the file the server files seems to exists."
+        STARTCMD="wine /fs/FarmingSimulator2022.exe"
+    else
+        echo "Either you do not have write permission to the /fs directory, or the server files not exist."
+        exit 1
+        STARTCMD="sleep 50"
+    fi
+elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ ! -z "${DLC_EXE}" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
     STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
 elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
@@ -74,7 +82,7 @@ elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
         chmod 600 /home/container/.vnc/passwd
         chmod 755 /home/container/.vnc/xstartup
     fi
-    echo "Please stop the server and set the PROGRESSION variable to ACTIVATE"
+    echo "Please stop the server and set the PROGRESSION variable to INSTALL_SERVER"
     STARTCMD="sleep 20"
 
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
