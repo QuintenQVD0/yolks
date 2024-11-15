@@ -63,7 +63,10 @@ if [ "${PROGRESSION}" == "MOVE_MOUNT_FILES" ]; then
     echo "Moving mounted game and server files..."
     #cp -r /fs/* /home/container/Farming\ Simulator\ 2022/
     mv /fs/* /home/container/Farming\ Simulator\ 2022/
-    elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
+    echo "Please stop the server and set the PROGRESSION variable to SETUP_VNC"
+    STARTCMD="sleep 20"
+
+elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
     # Set up VNC configuration if it doesn't already exist
     echo "Setting up VNC configuration..."
     if [ -f "/home/container/.vnc/passwd" ]; then
@@ -77,6 +80,8 @@ if [ "${PROGRESSION}" == "MOVE_MOUNT_FILES" ]; then
         echo "[ -r /home/container/.Xresources ] && xrdb /home/container/.Xresources" >> /home/container/.vnc/xstartup
         echo "xsetroot -solid grey" >> /home/container/.vnc/xstartup
     fi
+    echo "Please stop the server and set the PROGRESSION variable to ACTIVATE"
+    STARTCMD="sleep 20"
 
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Activate VNC and set the start command for the game
