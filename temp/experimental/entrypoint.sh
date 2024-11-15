@@ -56,23 +56,12 @@ if [[ -d /tmp/.X11-unix ]]; then
 fi
 
 # Handle various progression states
-if [ "${PROGRESSION}" == "MOVE_SEVRER_FILES" ]; then
-    # Move the mounted game and server files to the correct directory
-    echo "Moving mounted game and server files..., This can take a wile"
-    mkdir -p /home/container/Farming\ Simulator\ 2022/
-    mv /fs/* /home/container/Farming\ Simulator\ 2022/
-    echo "Please stop the server and set the PROGRESSION variable to SETUP_VNC"
-    STARTCMD="sleep 20"
-
-elif [ "${PROGRESSION}" == "COPY_SERVER_FILES" ]; then
-    # Move the mounted game and server files to the correct directory
-    echo "Moving mounted game and server files..., This can take a wile"
-    mkdir -p /home/container/Farming\ Simulator\ 2022/
-    
-    cp -r -f /fs/* /home/container/Farming\ Simulator\ 2022/
-    echo "Please stop the server and set the PROGRESSION variable to SETUP_VNC"
-    STARTCMD="sleep 20"
-
+if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+    STARTCMD="wine /fs/FarmingSimulator2022.exe"
+elif [ "${PROGRESSION}" == "INSTALL_DLC" ]; then
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+    STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
 elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
     # Set up VNC configuration if it doesn't already exist
     echo "Setting up VNC configuration..."
@@ -91,13 +80,13 @@ elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd 
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
     STARTCMD="wine /home/container/Farming\ Simulator\ 2022/FarmingSimulator2022.exe"
 
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd 
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
 
 else
