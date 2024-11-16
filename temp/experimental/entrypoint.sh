@@ -55,13 +55,22 @@ if [[ -d /tmp/.X11-unix ]]; then
     find /tmp/.X11-unix -maxdepth 1 -name 'X*' -type s -exec rm -f {} \;
 fi
 
+# Check if FS_VERSION is not 22 or 25
+if [[ "${FS_VERSION}" != "22" && "${FS_VERSION}" != "25" ]]; then
+  # Set FS_VERSION to 22
+  FS_VERSION="22"
+  echo "FS_VERSION is set to 22"
+else
+  echo "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
+fi
+
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
      # Check if the directory is writable and the file exists
-    if [ -w "/fs" ] && [ -f "fs/FarmingSimulator2022.exe" ]; then
+    if [ -w "/fs" ] && [ -f "fs/FarmingSimulator20${FS_VERSION}.exe" ]; then
         echo "You have write permission to the /fs directory and the file the server files seems to exists."
-        STARTCMD="wine /fs/FarmingSimulator2022.exe"
+        STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
     else
         echo "Either you do not have write permission to the /fs directory, or the server files not exist."
         exit 1
@@ -89,7 +98,7 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-    STARTCMD="wine /home/container/Farming\ Simulator\ 2022/FarmingSimulator2022.exe"
+    STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
 
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
