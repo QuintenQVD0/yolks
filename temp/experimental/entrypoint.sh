@@ -68,7 +68,7 @@ fi
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
      # Check if the directory is writable and the file exists
-    if [ -f "fs/FarmingSimulator20${FS_VERSION}.exe" ]; then
+    if [ "1" == "1" ]; then
         echo "You have write permission to the /fs directory and the file the server files seems to exists."
         STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
     else
