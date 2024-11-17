@@ -25,6 +25,10 @@ RUN             rm -rf /var/lib/apt/lists/*
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
 
+# Download custom reverse proxy to allow the web dashboard to be avaible to the public
+RUN            wget -q -Q /usr/sbin/reverse_proxy_linux_x64 https://github.com/QuintenQVD0/fs-reverse-proxy/releases/download/v1.0.0/reverse_proxy_linux_x64 \
+               && chmod +x /usr/sbin/reverse_proxy_linux_x64
+
        
 ENV         WINEPREFIX=/home/container/.wine
 ENV         WINEDLLOVERRIDES="mscoree,mshtml="

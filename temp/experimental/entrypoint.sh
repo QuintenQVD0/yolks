@@ -104,6 +104,12 @@ elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+
+    if [ -n "${WEB_REVERSE_PORT}" ]; then
+        /usr/sbin/reverse_proxy_linux_x64 --listen-port ${$WEB_REVERSE_PORT} --log-file /home/container/farming-dashboard-reverse-server.log --background
+    else
+        echo "WEB_REVERSE_PORT is not set or is empty. So we do not start the dashboard reverse proxy"
+    fi
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
 
 else
