@@ -64,18 +64,31 @@ else
   echo "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
 fi
 
+# Soon (Auto install)
+# mkdir -p "/home/container/Farming\ Simulator\ 20${FS_VERSION}"
+# AVAILABLE_SPACE=$(df --output=avail -BG "/home/container/Farming\ Simulator\ 20${FS_VERSION}" | tail -n 1 | sed 's/G//')
+#Compare the available space with the required space
+#if [ "$AVAILABLE_SPACE" -lt "30" ]; then
+#    echo "ERROR: Less than 30 GB free space on "/home/container/Farming\ Simulator\ 20${FS_VERSION}"Exiting..."
+#    STARTCMD="sleep 50"
+#    exit 1
+#fi
+#if ! [ -f "/fs/FarmingSimulator20${FS_VERSION}.exe" ]; then
+#  echo "Installer files not found"
+#  STARTCMD="sleep 50"
+#  exit 1
+#else
+#  STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming\ Simulator\ 20${FS_VERSION}\""
+#fi
+
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
+	echo "Starting the VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-     # Check if the directory is writable and the file exists
-    if [ "1" == "1" ]; then
-        echo "You have write permission to the /fs directory and the file the server files seems to exists."
-        STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
-    else
-        echo "Either you do not have write permission to the /fs directory, or the server files not exist."
-        exit 1
-        STARTCMD="sleep 50"
-    fi
+	
+ 	echo "Starting the install proces, please connect to the VNC server to continue the setup"
+    STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
+	
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ ! -z "${DLC_EXE}" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
     STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
@@ -98,6 +111,8 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+	
+ 	echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
     STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
 
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
@@ -106,6 +121,7 @@ elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
 
     if [ -n "${WEB_REVERSE_PORT}" ]; then
+		echo "Starting the Reverse proxy for the web dashboard on port ${$WEB_REVERSE_PORT}"
         /usr/sbin/reverse_proxy_linux_x64 --listen-port ${$WEB_REVERSE_PORT} --log-file /home/container/farming-dashboard-reverse-server.log --background
     else
         echo "WEB_REVERSE_PORT is not set or is empty. So we do not start the dashboard reverse proxy"
