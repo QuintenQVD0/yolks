@@ -122,7 +122,7 @@ elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
 
     if [ -n "${WEB_REVERSE_PORT}" ]; then
 		echo "Starting the Reverse proxy for the web dashboard on port ${$WEB_REVERSE_PORT}"
-        /usr/sbin/reverse_proxy_linux_x64 --listen-port ${$WEB_REVERSE_PORT} --log-file /home/container/farming-dashboard-reverse-server.log --background
+        /usr/sbin/reverse_proxy_linux_x64 --listen-port ${WEB_REVERSE_PORT} --log-file /home/container/farming-dashboard-reverse-server.log --background
     else
         echo "WEB_REVERSE_PORT is not set or is empty. So we do not start the dashboard reverse proxy"
     fi
