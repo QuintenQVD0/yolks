@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Set working directory
-cd /home/container
+cd /home/container || exit
 
 # Display system information
 echo "Running on Debian version: $(cat /etc/debian_version)"
@@ -32,7 +32,7 @@ if [[ $WINETRICKS_RUN =~ mono ]]; then
         WINETRICKS_RUN=${WINETRICKS_RUN/mono}
 
         if [ ! -f "$WINEPREFIX/mono.msi" ]; then
-                wget -q -O $WINEPREFIX/mono.msi https://dl.winehq.org/wine/wine-mono/9.3.0/wine-mono-9.3.0-x86.msi
+                wget -q -O $WINEPREFIX/mono.msi https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
         fi
 
         wine msiexec /i $WINEPREFIX/mono.msi /qn /quiet /norestart /log $WINEPREFIX/mono_install.log
@@ -73,25 +73,28 @@ fi
 #    STARTCMD="sleep 50"
 #    exit 1
 #fi
-#if ! [ -f "/fs/FarmingSimulator20${FS_VERSION}.exe" ]; then
-#  echo "Installer files not found"
-#  STARTCMD="sleep 50"
-#  exit 1
-#else
-#  STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming\ Simulator\ 20${FS_VERSION}\""
-#fi
+
 
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
 	echo "Starting the VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-	
- 	echo "Starting the install proces, please connect to the VNC server to continue the setup"
-    STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
-	
-elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ ! -z "${DLC_EXE}" ]; then
+    
+    if ! [ -f "/fs/FarmingSimulator20${FS_VERSION}.exe" ]; then
+        echo "Error: Installer files not found at /fs/FarmingSimulator20${FS_VERSION}.exe"
+        echo "Please check if you did the mount setup right."
+        STARTCMD="sleep 50"
+        exit 1
+    else
+     	echo "Starting the install proces, please connect to the VNC server to continue the setup"
+        STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
+        #STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming\ Simulator\ 20${FS_VERSION}\""
+    fi
+
+elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
     STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
+
 elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
     # Set up VNC configuration if it doesn't already exist
     echo "Setting up VNC configuration..."
@@ -108,13 +111,20 @@ elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
     STARTCMD="sleep 20"
 
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
+
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
 	
- 	echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
-    STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
-
+    if ! [ -f "/home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe" ]; then
+        echo "Error: The needed files where not found to actiavte the game"
+        STARTCMD="sleep 50"
+        exit 1
+    else
+     	echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
+        STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
+    fi
+    
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
@@ -131,9 +141,8 @@ elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
 else
     # Unrecognized progression state
     echo "Error: The PROGRESSION variable is set to an unknown value."
-    exit 1
-
     STARTCMD="sleep 50"
+    exit 1
 fi
 
 # Echo the final startup command
