@@ -1,10 +1,8 @@
-# Using CentOS 7 base image and VNC
-FROM  quintenqvd/pterodactyl_images:temp_experimental@sha256:dfdaa86a0dcefb0ba4e757b77da9f3c55994c4909b8f34a563b1c17c032ab858
+FROM  tobix/wine:staging@sha256:687f5074b10c0fae28c0989fe251011663eb4d0b29709ba2acee99ebb0ca739b
 
 ENV         DEBIAN_FRONTEND=noninteractive
 
-RUN			rm /usr/sbin/winetricks /usr/sbin/reverse_proxy_linux_x64 /entrypoint.sh
-#RUN useradd -m -d /home/container -s /bin/bash container 
+RUN useradd -m -d /home/container -s /bin/bash container 
 
 ## install required packages
 RUN             dpkg --add-architecture i386 \
