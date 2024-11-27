@@ -19,7 +19,7 @@ RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-bui
 RUN             apt update
 #RUN             wget https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/wine-staging-amd64_9.21~bookworm-1_amd64.deb \
 #                && dpkg -i wine-staging-amd64_9.21~bookworm-1_amd64.deb
-RUN             apt install --install-recommends winehq-staging=9.21~bookworm-1 cabextract wine-binfmt -y
+RUN             apt install --install-recommends wine-staging-amd64=9.21~bookworm-1 cabextract wine-binfmt -y
 RUN             apt install -y surf openbox
 RUN             rm -rf /var/lib/apt/lists/*
 
