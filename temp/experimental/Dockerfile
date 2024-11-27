@@ -20,7 +20,7 @@ RUN             apt update
 #RUN             apt install --install-recommends wine-staging-amd64=9.21~bookworm-1 wine-staging-i386=9.21~bookworm-1 cabextract wine-binfmt -y
 RUN             apt install -y surf openbox
 RUN             rm -rf /var/lib/apt/lists/*
-
+RUN             wine --version
 # Set up Winetricks
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
