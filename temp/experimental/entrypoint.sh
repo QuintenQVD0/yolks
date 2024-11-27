@@ -80,16 +80,9 @@ if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
 	echo "Starting the VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
     
-    if ! [ -f "/fs/FarmingSimulator20${FS_VERSION}.exe" ]; then
-        echo "Error: Installer files not found at /fs/FarmingSimulator20${FS_VERSION}.exe"
-        echo "Please check if you did the mount setup right."
-        STARTCMD="sleep 50"
-        exit 1
-    else
-     	echo "Starting the install proces, please connect to the VNC server to continue the setup"
-        STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
-        #STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming\ Simulator\ 20${FS_VERSION}\""
-    fi
+    echo "Starting the install proces, please connect to the VNC server to continue the setup"
+    STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
+    #STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming\ Simulator\ 20${FS_VERSION}\""
 
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
@@ -116,14 +109,8 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
     echo "Activating VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
 	
-    if ! [ -f "/home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe" ]; then
-        echo "Error: The needed files where not found to actiavte the game"
-        STARTCMD="sleep 50"
-        exit 1
-    else
-     	echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
-        STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
-    fi
+    echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
+    STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
     
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
