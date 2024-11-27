@@ -15,6 +15,7 @@ export INTERNAL_IP
 
 # Define Wine prefix path
 export WINEPREFIX=/home/container/.wine
+#export XDG_RUNTIME_DIR="/home/container/.cache"
 
 # Ensure Wine prefix directory exists
 echo "Creating Wine prefix directory..."
@@ -24,18 +25,6 @@ mkdir -p "$WINEPREFIX"
 if [ -f /home/container/.vnc/passwd ]; then
     echo "Setting VNC password..."
     echo "${VNC_PASS}" | vncpasswd -f > /home/container/.vnc/passwd
-fi
-
-# Check if wine-mono required and install it if so
-if [[ $WINETRICKS_RUN =~ mono ]]; then
-        echo "Installing mono"
-        WINETRICKS_RUN=${WINETRICKS_RUN/mono}
-
-        if [ ! -f "$WINEPREFIX/mono.msi" ]; then
-                wget -q -O $WINEPREFIX/mono.msi https://dl.winehq.org/wine/wine-mono/9.3.0/wine-mono-9.3.0-x86.msi
-        fi
-
-        wine msiexec /i $WINEPREFIX/mono.msi /qn /quiet /norestart /log $WINEPREFIX/mono_install.log
 fi
 
 # Install additional Winetricks
@@ -64,65 +53,30 @@ else
   echo "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
 fi
 
-# Soon (Auto install)
-# mkdir -p "/home/container/Farming\ Simulator\ 20${FS_VERSION}"
-# AVAILABLE_SPACE=$(df --output=avail -BG "/home/container/Farming\ Simulator\ 20${FS_VERSION}" | tail -n 1 | sed 's/G//')
-#Compare the available space with the required space
-#if [ "$AVAILABLE_SPACE" -lt "30" ]; then
-#    echo "ERROR: Less than 30 GB free space on "/home/container/Farming\ Simulator\ 20${FS_VERSION}"Exiting..."
-#    STARTCMD="sleep 50"
-#    exit 1
-#fi
-
-
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
-	echo "Starting the VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-    
-    echo "Starting the install proces, please connect to the VNC server to continue the setup"
-    STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe"
-    #STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming\ Simulator\ 20${FS_VERSION}\""
+     # Check if the directory is writable and the file exists
+     
+    STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
 
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
     STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
 
-elif [ "${PROGRESSION}" == "SETUP_VNC" ]; then
-    # Set up VNC configuration if it doesn't already exist
-    echo "Setting up VNC configuration..."
-    if [ -f "/home/container/.vnc/passwd" ]; then
-        echo "VNC configuration already exists."
-    else
-        mkdir -p /home/container/.vnc && cd /home/container/.vnc
-        wget https://raw.githubusercontent.com/QuintenQVD0/yolks/refs/heads/master/temp/experimental/xstartup
-        touch /home/container/.vnc/passwd /home/container/.Xauthority
-        chmod 600 /home/container/.vnc/passwd
-        chmod 755 /home/container/.vnc/xstartup
-    fi
-    echo "Please stop the server and set the PROGRESSION variable to INSTALL_SERVER"
-    STARTCMD="sleep 20"
-
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
-
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-	
+    
     echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
     STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
-    
+
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
 
-    if [ -n "${WEB_REVERSE_PORT}" ]; then
-		echo "Starting the Reverse proxy for the web dashboard on port ${WEB_REVERSE_PORT}"
-        /usr/sbin/reverse_proxy_linux_x64 --listen-port ${WEB_REVERSE_PORT} --log-file /home/container/farming-dashboard-reverse-server.log --background
-    else
-        echo "WEB_REVERSE_PORT is not set or is empty. So we do not start the dashboard reverse proxy"
-    fi
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
 
 else
@@ -130,6 +84,7 @@ else
     echo "Error: The PROGRESSION variable is set to an unknown value."
     STARTCMD="sleep 50"
     exit 1
+
 fi
 
 # Echo the final startup command

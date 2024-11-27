@@ -1,6 +1,8 @@
-FROM  tobix/wine:staging@sha256:687f5074b10c0fae28c0989fe251011663eb4d0b29709ba2acee99ebb0ca739b
+# Using CentOS 7 base image and VNC
+FROM  debian:bookworm-slim
 
 ENV         DEBIAN_FRONTEND=noninteractive
+
 
 RUN useradd -m -d /home/container -s /bin/bash container 
 
@@ -11,16 +13,14 @@ RUN             dpkg --add-architecture i386 \
 
 
 # Install wine staging
-#RUN             mkdir -pm755 /etc/apt/keyrings
-#RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
-#RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
+RUN             mkdir -pm755 /etc/apt/keyrings
+RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
+RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
 RUN             apt update
-#RUN             wget https://dl.winehq.org/wine-builds/debian/dists/bookworm/main/binary-amd64/wine-staging-amd64_9.21~bookworm-1_amd64.deb \
-#                && dpkg -i wine-staging-amd64_9.21~bookworm-1_amd64.deb
-#RUN             apt install --install-recommends wine-staging-amd64=9.21~bookworm-1 wine-staging-i386=9.21~bookworm-1 cabextract wine-binfmt -y
+RUN             apt install --install-recommends winehq-staging cabextract wine-binfmt -y
 RUN             apt install -y surf openbox
 RUN             rm -rf /var/lib/apt/lists/*
-RUN             wine --version
+
 # Set up Winetricks
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
@@ -31,7 +31,7 @@ RUN            wget -q -O /usr/sbin/reverse_proxy_linux_x64 https://github.com/Q
 
        
 ENV         WINEPREFIX=/home/container/.wine
-ENV         WINEDLLOVERRIDES="mscoree,mshtml="
+ENV         WINEDLLOVERRIDES="mscoree,mscoree=d,mshtml="
 USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
