@@ -8,5 +8,7 @@ export DISPLAY=:1
 [ -r /home/container/.Xresources ] && xrdb /home/container/.Xresources
 xsetroot -solid grey
 
+#xloadimage -fullscreen -onroot /FarmingSimulator25.png
+
 # Start Openbox window manager
 openbox &
