@@ -31,7 +31,7 @@ RUN            wget -q -O /usr/sbin/reverse_proxy_linux_x64 https://github.com/Q
 
        
 ENV         WINEPREFIX=/home/container/.wine
-ENV         WINEDLLOVERRIDES="mscoree,mscoree=d,mshtml="
+ENV         WINEDLLOVERRIDES="mscoree=d,mshtml="
 USER        container
 ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
