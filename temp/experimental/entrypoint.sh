@@ -27,6 +27,19 @@ if [ -f /home/container/.vnc/passwd ]; then
     echo "${VNC_PASS}" | vncpasswd -f > /home/container/.vnc/passwd
 fi
 
+# Check if wine-mono required and install it if so
+if [[ $WINETRICKS_RUN =~ movo ]]; then
+        echo "Installing mono"
+        WINETRICKS_RUN=${WINETRICKS_RUN/mono}
+
+        if [ ! -f "$WINEPREFIX/mono.msi" ]; then
+                wget -q -O $WINEPREFIX/mono.msi https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
+        fi
+
+        wine msiexec /i $WINEPREFIX/mono.msi /qn /quiet /norestart /log $WINEPREFIX/mono_install.log
+fi
+
+
 # Install additional Winetricks
 for trick in $WINETRICKS_RUN; do
     echo "Installing Winetrick: $trick"
