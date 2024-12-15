@@ -85,15 +85,6 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
     echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
     STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
     
-    # Echo the final startup command
-    echo "Starting with command: ${STARTCMD}"
-    
-    # Execute the startup command
-    eval "${STARTCMD}"
-    
-    # Keep the session alive after the executable exits
-    tail -f /dev/null
-
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
@@ -108,7 +99,17 @@ else
 
 fi
 
-if ! [ "${PROGRESSION}" == "ACTIVATE" ]; then
+if [ "${PROGRESSION}" == "ACTIVATE" ] || [ "${PROGRESSION}" == "INSTALL_DLC" ]; then
+
+    # Echo the final startup command
+    echo "Starting with command: ${STARTCMD}"
+
+    # Execute the startup command
+    eval "${STARTCMD}"
+
+    # Keep the session alive after the executable exits
+    tail -f /dev/null
+else
 
     # Echo the final startup command
     echo "Starting with command: ${STARTCMD}"
