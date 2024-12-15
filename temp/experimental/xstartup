@@ -6,9 +6,9 @@ unset DBUS_SESSION_BUS_ADDRESS
 
 export DISPLAY=:1
 [ -r /home/container/.Xresources ] && xrdb /home/container/.Xresources
-xsetroot -solid grey
+#xsetroot -solid grey
 
-#xloadimage -fullscreen -onroot /FarmingSimulator25.png
+xloadimage -fullscreen -onroot /FarmingSimulator25.png
 
 # Start Openbox window manager
 openbox &

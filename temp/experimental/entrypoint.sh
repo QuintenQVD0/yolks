@@ -84,6 +84,15 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
     
     echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
     STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
+    
+    # Echo the final startup command
+    echo "Starting with command: ${STARTCMD}"
+    
+    # Execute the startup command
+    eval "${STARTCMD}"
+    
+    # Keep the session alive after the executable exits
+    tail -f /dev/null
 
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
@@ -91,7 +100,6 @@ elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
 
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
-
 else
     # Unrecognized progression state
     echo "Error: The PROGRESSION variable is set to an unknown value."
@@ -100,8 +108,12 @@ else
 
 fi
 
-# Echo the final startup command
-echo "Starting with command: ${STARTCMD}"
+if ! [ "${PROGRESSION}" == "ACTIVATE" ]; then
 
-# Execute the startup command
-eval "${STARTCMD}"
+    # Echo the final startup command
+    echo "Starting with command: ${STARTCMD}"
+
+    # Execute the startup command
+    eval "${STARTCMD}"
+
+fi
