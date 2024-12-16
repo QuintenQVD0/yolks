@@ -1,7 +1,7 @@
 FROM  --platform=$TARGETOS/$TARGETARCH ubuntu:22.04
 
 
-ENV   DEBIAN_FRONTEND noninteractive
+ENV   DEBIAN_FRONTEND=noninteractive
 
 ## add container user
 RUN   useradd -m -d /home/container -s /bin/bash container

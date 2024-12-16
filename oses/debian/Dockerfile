@@ -2,7 +2,7 @@ FROM         --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
 
 LABEL        author="Michael Parker" maintainer="parker@pterodactyl.io"
 
-ENV          DEBIAN_FRONTEND noninteractive
+ENV          DEBIAN_FRONTEND=noninteractive
 
 RUN          useradd -m -d /home/container -s /bin/bash container
 

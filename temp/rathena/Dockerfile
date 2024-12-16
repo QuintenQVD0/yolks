@@ -1,6 +1,6 @@
 FROM  --platform=$TARGETOS/$TARGETARCH debian:bullseye-slim
 
-ENV   DEBIAN_FRONTEND noninteractive
+ENV   DEBIAN_FRONTEND=noninteractive
 
 ## add container user
 RUN   useradd -m -d /home/container -s /bin/bash container

@@ -32,9 +32,9 @@ RUN		dpkg --add-architecture armhf
 
 RUN		apt update \
         && apt install -y wget gnupg2 \
-		&& wget https://ryanfortner.github.io/box86-debs/box86.list -O /etc/apt/sources.list.d/box86.list \
-		&& wget -qO- https://ryanfortner.github.io/box86-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box86-debs-archive-keyring.gpg  \
-        && apt update && apt install box86-rpi4arm64:armhf libc6 libc6:armhf -y 
+		&& wget -qO- "https://pi-apps-coders.github.io/box86-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box86-archive-keyring.gpg \
+        && printf "Types: deb\nURIs: https://Pi-Apps-Coders.github.io/box86-debs/debian\nSuites: ./\nSigned-By: /usr/share/keyrings/box86-archive-keyring.gpg\n" > /etc/apt/sources.list.d/box86.sources \
+		&& apt update && apt install box86-generic-arm:armhf libc6 libc6:armhf -y
 
 
 #COPY --from=build /tmp/install /
@@ -59,10 +59,12 @@ RUN          apt install -y libc++-dev libc6 git wget curl tar zip unzip binutil
 RUN     update-locale lang=en_US.UTF-8 \
         && dpkg-reconfigure --frontend noninteractive locales
 
-##Install box64
-RUN         wget https://ryanfortner.github.io/box64-debs/box64.list -O /etc/apt/sources.list.d/box64.list \
-            && wget -qO- https://ryanfortner.github.io/box64-debs/KEY.gpg | gpg --dearmor -o /etc/apt/trusted.gpg.d/box64-debs-archive-keyring.gpg \
-            && apt update && apt install box64-rpi4arm64 -y
+## Install box64
+RUN     mkdir -p /usr/share/keyrings \
+        && wget -qO- "https://pi-apps-coders.github.io/box64-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box64-archive-keyring.gpg \
+        && printf "Types: deb\nURIs: https://Pi-Apps-Coders.github.io/box64-debs/debian\nSuites: ./\nSigned-By: /usr/share/keyrings/box64-archive-keyring.gpg\n" > /etc/apt/sources.list.d/box64.sources \
+        && apt update \
+        && apt install box64-generic-arm -y
 
 ## steamcmd specific packages            
 RUN        apt install -y libc6:armhf libncurses5:armhf libsdl2-2.0-0:armhf libsdl2-image-2.0-0:armhf libsdl2-mixer-2.0-0:armhf libsdl2-ttf-2.0-0:armhf libopenal1:armhf libpng16-16:armhf libfontconfig1:armhf libxcomposite1:armhf libbz2-1.0:armhf libxtst6:armhf libsm6:armhf libice6:armhf libgl1:armhf libxinerama1:armhf libxdamage1:armhf

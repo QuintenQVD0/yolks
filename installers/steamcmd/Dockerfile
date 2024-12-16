@@ -1,15 +1,15 @@
 FROM        --platform=$TARGETOS/$TARGETARCH debian:bookworm-slim
 
-ENV     DEBIAN_FRONTEND noninteractive
+ENV     DEBIAN_FRONTEND=noninteractive
 
 ## install box86
 RUN		dpkg --add-architecture armhf
 
 RUN		apt update \
                 && apt install -y wget gnupg2 \
-		&& wget https://itai-nelken.github.io/weekly-box86-debs/debian/box86.list -O /etc/apt/sources.list.d/box86.list \
-		&& wget -qO- https://itai-nelken.github.io/weekly-box86-debs/debian/KEY.gpg | apt-key add - \
-		&& apt update && apt install box86:armhf libc6 libc6:armhf -y
+		&& wget -qO- "https://pi-apps-coders.github.io/box86-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box86-archive-keyring.gpg \
+                && printf "Types: deb\nURIs: https://Pi-Apps-Coders.github.io/box86-debs/debian\nSuites: ./\nSigned-By: /usr/share/keyrings/box86-archive-keyring.gpg\n" > /etc/apt/sources.list.d/box86.sources \
+		&& apt update && apt install box86-generic-arm:armhf libc6 libc6:armhf -y
 
 ## Install box64
 RUN     mkdir -p /usr/share/keyrings \
