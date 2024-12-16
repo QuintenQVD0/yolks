@@ -20,8 +20,8 @@ RUN         dpkg --add-architecture armhf \
 				net-tools \
                 libnss-wrapper \
                 libnss-wrapper:armhf \
-                libtbb2 \
-                libtbb2:armhf
+                libtbbmalloc2 \
+                libtbbmalloc2:armhf
 
 ## Configure locale
 RUN         update-locale lang=en_US.UTF-8 \
