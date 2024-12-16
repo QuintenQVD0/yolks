@@ -12,15 +12,11 @@ RUN		apt update \
 		&& apt update && apt install box86:armhf libc6 libc6:armhf -y
 
 ## Install box64
-RUN         mkdir -p /usr/share/keyrings \
-            && wget -qO- "https://pi-apps-coders.github.io/box64-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box64-archive-keyring.gpg \
-            && echo "Types: deb
-            URIs: https://Pi-Apps-Coders.github.io/box64-debs/debian
-            Suites: ./
-            Signed-By: /usr/share/keyrings/box64-archive-keyring.gpg" | tee /etc/apt/sources.list.d/box64.sources >/dev/null \
-            && apt update \
-            && apt install box64-generic-arm -y
-
+RUN     mkdir -p /usr/share/keyrings \
+        && wget -qO- "https://pi-apps-coders.github.io/box64-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box64-archive-keyring.gpg \
+        && printf "Types: deb\nURIs: https://Pi-Apps-Coders.github.io/box64-debs/debian\nSuites: ./\nSigned-By: /usr/share/keyrings/box64-archive-keyring.gpg\n" > /etc/apt/sources.list.d/box64.sources \
+        && apt update \
+        && apt install box64-generic-arm -y
 
 RUN     dpkg --add-architecture armhf && \
         apt-get update && \
