@@ -21,9 +21,7 @@ COPY --from=builder /tmp/rcon /usr/local/bin/rcon
 RUN     apt update && apt -y install software-properties-common wget curl fuse squashfs-tools zenity libsdl2-2.0-0 libepoxy0 libgl1 squashfuse \
         && add-apt-repository ppa:fex-emu/fex \
         && apt update \
-        && wget https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-armv8.0_2312.1~l_arm64.deb \
-        && dpkg -i fex-emu-armv8.0_2312.1~l_arm64.deb \
-        && apt -y install fex-emu-binfmt32 fex-emu-binfmt64
+        && apt -y install fex-emu-binfmt32 fex-emu-binfmt64 fex-emu-armv8.0
 
 RUN	apt update \ 
         && apt -y install curl git iproute2 libssl-dev squashfuse fuse squashfs-tools tzdata tar wget zip build-essential unzip gdb gettext screen numactl libc6 libstdc++6 \
