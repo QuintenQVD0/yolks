@@ -37,8 +37,6 @@ ENV         USER=container HOME=/home/container
 WORKDIR     /home/container
 
 
-ENV DISPLAY=":1"
-
 ADD FarmingSimulator25.png /FarmingSimulator25.png
 ADD entrypoint.sh /entrypoint.sh
 CMD             [ "/bin/bash", "/entrypoint.sh" ]

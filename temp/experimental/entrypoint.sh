@@ -7,11 +7,14 @@ cd /home/container || exit
 echo "Running on Debian version: $(cat /etc/debian_version)"
 echo "Current timezone: $(cat /etc/timezone)"
 echo "Wine version: $(wine --version)"
-export DISPLAY=":1"
 
 # Make internal Docker IP address available to processes
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
+
+if ! [ "$INTERNAL_IP" == "10.0.0.41" ]; then
+    export DISPLAY=":1"
+fi
 
 # Define Wine prefix path
 export WINEPREFIX=/home/container/.wine
@@ -69,12 +72,13 @@ fi
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-     # Check if the directory is writable and the file exists
+    # Check if the directory is writable and the file exists
      
     STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
 
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+    
     STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
 
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
