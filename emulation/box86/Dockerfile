@@ -1,23 +1,13 @@
-#arm64v8
-FROM debian:bullseye-slim as build
-
-RUN dpkg --add-architecture armhf && \
-    apt-get update && \
-    apt-get install --yes --no-install-recommends git  python3 build-essential cmake ca-certificates && \
-    apt-get install --yes --no-install-recommends gcc-arm-linux-gnueabihf libc6-dev-armhf-cross libc6:armhf libstdc++6:armhf && \
-    apt-get clean && \
-    rm -rf /var/lib/apt/lists/{apt,dpkg,cache,log} /tmp/* /var/tmp/*
-
-RUN git clone https://github.com/ptitSeb/box86.git; mkdir /box86/build
-
-WORKDIR /box86/build
-RUN cmake .. -DRPI4ARM64=1 -DARM_DYNAREC=ON -DCMAKE_BUILD_TYPE=RelWithDebInfo && \
-    make -j$(nproc) && \
-    make install DESTDIR=/tmp/install
-
 FROM debian:bullseye-slim
 
-COPY --from=build /tmp/install /
+
+RUN		dpkg --add-architecture armhf
+
+RUN		apt update \
+        && apt install -y wget gnupg2 \
+		&& wget -qO- "https://pi-apps-coders.github.io/box86-debs/KEY.gpg" | gpg --dearmor -o /usr/share/keyrings/box86-archive-keyring.gpg \
+        && printf "Types: deb\nURIs: https://Pi-Apps-Coders.github.io/box86-debs/debian\nSuites: ./\nSigned-By: /usr/share/keyrings/box86-archive-keyring.gpg\n" > /etc/apt/sources.list.d/box86.sources \
+		&& apt update && apt install box86-generic-arm:armhf libc6 libc6:armhf -y
 
 RUN dpkg --add-architecture armhf && \
     apt-get update && \
