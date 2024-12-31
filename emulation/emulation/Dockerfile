@@ -26,9 +26,9 @@ RUN		apt update \
 		&& apt update && apt install box86-generic-arm:armhf libc6 libc6:armhf -y
 
 
-RUN     wget https://github.com/QuintenQVD0/rcon-cli-arm64/releases/latest/download/gorcon-arm64 -O /usr/local/bin/rcon \
-        && chmod +x /usr/local/bin/rcon
-
+RUN     wget https://github.com/QuintenQVD0/rcon-cli/releases/latest/download/gorcon-linux-arm64  -O /usr/local/bin/rcon \
+	&& chmod +x /usr/local/bin/rcon
+        
 RUN dpkg --add-architecture armhf && \
     apt-get update && \
     apt-get install --yes --no-install-recommends libc6:armhf libstdc++6:armhf gcc-arm-linux-gnueabihf libc6:armhf libncurses5:armhf libpulse0:armhf libpulse-dev:armhf libatomic1:armhf && \

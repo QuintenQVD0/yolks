@@ -26,7 +26,6 @@ RUN     mkdir -p /usr/share/keyrings \
         && apt install box64-generic-arm -y
 
 
-
 RUN		useradd -d /home/container -m container
 USER    container
 ENV     USER=container HOME=/home/container

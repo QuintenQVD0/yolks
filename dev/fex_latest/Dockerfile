@@ -16,8 +16,8 @@ RUN	apt update \
   	    && dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
         && ls -la /usr/local/bin
 
-RUN     wget https://github.com/QuintenQVD0/rcon-cli-arm64/releases/latest/download/gorcon-arm64 -O /usr/local/bin/rcon \
-        && chmod +x /usr/local/bin/rcon
+RUN     wget https://github.com/QuintenQVD0/rcon-cli/releases/latest/download/gorcon-linux-arm64  -O /usr/local/bin/rcon \
+	&& chmod +x /usr/local/bin/rcon
 
 WORKDIR /home/container
 
