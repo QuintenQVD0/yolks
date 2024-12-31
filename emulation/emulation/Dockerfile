@@ -15,17 +15,6 @@
 #    make install DESTDIR=/tmp/install
 
 
-FROM --platform=linux/arm64 golang:1.19.3-bullseye as builder
-
-RUN 	apt update \
-		&& apt install -y git curl gcc musl-dev
-
-RUN 	git clone https://github.com/gorcon/rcon-cli.git \
-		&& cd rcon-cli/ \
-		&& go get -v -t -d ./... \
-		&& go build -v ./cmd/gorcon \
-		&& mv gorcon /tmp/rcon
-
 FROM  debian:bullseye-slim
 
 RUN		dpkg --add-architecture armhf
@@ -37,8 +26,8 @@ RUN		apt update \
 		&& apt update && apt install box86-generic-arm:armhf libc6 libc6:armhf -y
 
 
-#COPY --from=build /tmp/install /
-COPY --from=builder /tmp/rcon /usr/local/bin/rcon
+RUN     wget https://github.com/QuintenQVD0/rcon-cli-arm64/releases/latest/download/gorcon-arm64 -O /usr/local/bin/rcon \
+        && chmod +x /usr/local/bin/rcon
 
 RUN dpkg --add-architecture armhf && \
     apt-get update && \

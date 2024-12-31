@@ -1,25 +1,14 @@
-## RCON
-FROM --platform=linux/arm64 golang:1.19.3-bullseye as builder
-
-RUN 	apt update \
-		&& apt install -y git curl gcc musl-dev
-
-RUN 	git clone https://github.com/gorcon/rcon-cli.git \
-		&& cd rcon-cli/ \
-		&& go get -v -t -d ./... \
-		&& go build -v ./cmd/gorcon \
-		&& mv gorcon /tmp/rcon
-
 
 FROM       --platform=$TARGETOS/$TARGETARCH quintenqvd/pterodactyl_images:installer_steamcmd
 
 ## install required packages
 RUN         apt update
-RUN         apt install -y --no-install-recommends software-properties-common libntlm0 winbind xauth libncurses6 dbus libgdiplus
+RUN         apt install -y --no-install-recommends software-properties-common libntlm0 winbind xauth libncurses6 dbus libgdiplus wget
 RUN         apt install -y alsa-tools pulseaudio libasound2 libao-common gnutls-bin gnupg numactl curl python3 python3-pip python3-setuptools
 
 RUN         useradd -d /home/container -m container
-COPY --from=builder /tmp/rcon /usr/local/bin/rcon
+RUN     wget https://github.com/QuintenQVD0/rcon-cli-arm64/releases/latest/download/gorcon-arm64 -O /usr/local/bin/rcon \ 
+        && chmod +x /usr/local/bin/rcon
 
 # Download Proton GE
 RUN         curl -sLOJ "$(curl -s https://api.github.com/repos/GloriousEggroll/proton-ge-custom/releases/latest | grep browser_download_url | cut -d\" -f4 | egrep .tar.gz)"
@@ -42,9 +31,9 @@ RUN     apt-get update \
 				
 RUN 		 apt-get update && apt-get install -y apt-transport-https
 
-RUN          apt install -y libc++-dev libc6 git wget tar zip unzip binutils xz-utils liblzo2-2 cabextract iproute2 net-tools libatomic1 libsdl1.2debian libsdl2-2.0-0 \
+RUN          apt install -y libc++-dev libc6 git tar zip unzip binutils xz-utils liblzo2-2 cabextract iproute2 net-tools libatomic1 libsdl1.2debian libsdl2-2.0-0 \
              libfontconfig libicu67 icu-devtools libunwind8 libssl-dev sqlite3 libsqlite3-dev libmariadbclient-dev-compat libduktape205 locales ffmpeg gnupg2 apt-transport-https software-properties-common ca-certificates \
-             libz-dev rapidjson-dev tzdata libevent-dev libzip4 libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 build-essential cmake libgdiplus libpulse0 libpulse-dev libatomic1 netcat \
+             libz-dev rapidjson-dev tzdata libevent-dev libzip4 libsdl2-mixer-2.0-0 libsdl2-image-2.0-0 build-essential cmake libgdiplus libpulse0 libpulse-dev libatomic1 netcat-openbsd \
              libflashrom1 libftdi1-2 telnet tini screen libxi6 xvfb
 
 RUN     update-locale lang=en_US.UTF-8 \

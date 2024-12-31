@@ -54,7 +54,6 @@ jobs:
        fail-fast: false
        matrix:
          tag:
-           - mta
            - vueapp-nginx
      steps:
        - uses: actions/checkout@v3
@@ -88,7 +87,6 @@ jobs:
           - pavlov_vr
           - rathena
           - "472942239040012288"
-          - python_311_ocr
           - "experimental"
     steps:
       - uses: actions/checkout@v3

@@ -20,6 +20,7 @@ jobs:
             - fex
             - fex_rust
             - fex_fivem
+            - fex_latest
       steps:
         - uses: actions/checkout@v3
         - uses: docker/setup-buildx-action@v2
