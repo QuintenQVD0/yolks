@@ -18,7 +18,7 @@ RUN	apt update \
 
 		
 RUN     wget https://github.com/QuintenQVD0/rcon-cli-arm64/releases/latest/download/gorcon-arm64 -O /usr/local/bin/rcon \
-		&& chmod +x /usr/local/bin/rcon
+	&& chmod +x /usr/local/bin/rcon
 
 WORKDIR /home/container
 

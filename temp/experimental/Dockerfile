@@ -1,8 +1,6 @@
-# Using CentOS 7 base image and VNC
 FROM  debian:bookworm-slim
 
-ENV         DEBIAN_FRONTEND=noninteractive
-
+ENV       DEBIAN_FRONTEND=noninteractive
 
 RUN useradd -m -d /home/container -s /bin/bash container 
 
