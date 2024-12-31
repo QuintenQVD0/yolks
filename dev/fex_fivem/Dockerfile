@@ -5,7 +5,7 @@ ENV   DEBIAN_FRONTEND=noninteractive
 ## add container user
 RUN   useradd -m -d /home/container -s /bin/bash container
 
-RUN     apt update && apt -y install software-properties-common wget curl fuse squashfs-tools zenity libsdl2-2.0-0 libepoxy0 libgl1 squashfuse \
+RUN     apt update && apt -y install software-properties-common wget curl fuse squashfs-tools zenity libsdl2-2.0-0 libepoxy0 libgl1 squashfuse binfmt-support \
         && apt update \
         && wget https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-armv8.0_2312.1~l_arm64.deb \
         && dpkg -i fex-emu-armv8.0_2312.1~l_arm64.deb \
