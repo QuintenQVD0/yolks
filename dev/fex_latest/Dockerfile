@@ -7,6 +7,7 @@ RUN   useradd -m -d /home/container -s /bin/bash container
 
 RUN     apt update && apt -y install software-properties-common wget curl fuse squashfs-tools zenity libsdl2-2.0-0 libepoxy0 libgl1 squashfuse binfmt-support \
         && apt update \
+        && apt -y install qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs libqt5core5a libqt5gui5 libqt5qml5 libqt5quick5 libqt5widgets5 \
         && wget http://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-armv8.0_2412~1~j_arm64.deb \
         && dpkg -i fex-emu-armv8.0_2412~1~j_arm64.deb \
         && wget http://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-binfmt32_2412~1~j_arm64.deb \
