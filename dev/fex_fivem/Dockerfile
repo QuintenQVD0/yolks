@@ -7,11 +7,11 @@ RUN   useradd -m -d /home/container -s /bin/bash container
 
 RUN     apt update && apt -y install software-properties-common wget curl fuse squashfs-tools zenity libsdl2-2.0-0 libepoxy0 libgl1 squashfuse binfmt-support \
         && apt update \
-        && wget https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-armv8.0_2312.1~l_arm64.deb \
+        && wget https://raw.githubusercontent.com/QuintenQVD0/yolks/refs/heads/master/dev/fex-emu-armv8.0_2312.1~l_arm64.deb \
         && dpkg -i fex-emu-armv8.0_2312.1~l_arm64.deb \
-        && wget https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-binfmt32_2312.1~l_arm64.deb \
+        && wget https://raw.githubusercontent.com/QuintenQVD0/yolks/refs/heads/master/dev/fex-emu-binfmt32_2312.1~l_arm64.deb \
         && dpkg -i fex-emu-binfmt32_2312.1~l_arm64.deb \
-        && wget https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-binfmt64_2312.1~l_arm64.deb \
+        && wget https://raw.githubusercontent.com/QuintenQVD0/yolks/refs/heads/master/dev/fex-emu-binfmt64_2312.1~l_arm64.deb \
         && dpkg -i fex-emu-binfmt64_2312.1~l_arm64.deb
 
 RUN	apt update \ 
