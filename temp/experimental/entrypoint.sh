@@ -62,37 +62,41 @@ fi
 
 # Check if FS_VERSION is not 22 or 25
 if [[ "${FS_VERSION}" != "22" && "${FS_VERSION}" != "25" ]]; then
-  # Set FS_VERSION to 22
-  FS_VERSION="22"
-  echo "FS_VERSION is set to 22"
+  # Set FS_VERSION to 25
+  FS_VERSION="25"
+  echo "FS_VERSION is set to 25"
 else
   echo "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
 fi
 
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
     # Check if the directory is writable and the file exists
      
     STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
 
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
     
     STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
 
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
-    
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
+
     echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
     STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
     
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "${VNC_PORT}" -rfbauth /home/container/.vnc/passwd
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
 
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
 else
