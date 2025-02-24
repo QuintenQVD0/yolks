@@ -19,7 +19,7 @@ RUN dpkg --add-architecture armhf && \
 RUN         dpkg --add-architecture i386 \
             && apt update \
             && apt upgrade -y \
-			&& apt install -y libtbb2:i386 libtbb-dev:i386 libicu-dev:i386 libstdc++6 dnsutils libsdl2-2.0-0
+			&& apt install -y libtbb-dev:i386 libicu-dev:i386 libstdc++6 dnsutils libsdl2-2.0-0
 			
 RUN 		 apt-get update && apt-get install -y apt-transport-https
 RUN          apt install -y libc++-dev libc6 git wget curl tar zip unzip binutils xz-utils liblzo2-2 cabextract iproute2 net-tools libatomic1 libsdl1.2debian libsdl2-2.0-0 \
