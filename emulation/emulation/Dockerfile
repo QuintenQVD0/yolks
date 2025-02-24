@@ -15,7 +15,7 @@
 #    make install DESTDIR=/tmp/install
 
 
-FROM  debian:bullseye-slim
+FROM  debian:boookworm-slim
 
 RUN		dpkg --add-architecture armhf
 

@@ -1,5 +1,7 @@
 FROM       --platform=$TARGETOS/$TARGETARCH quintenqvd/pterodactyl_images:installer_steamcmd
 
+ENV   DEBIAN_FRONTEND=noninteractive
+
 ## install required packages
 RUN         apt update
 RUN         apt install -y --no-install-recommends software-properties-common libntlm0 winbind xauth libncurses6 dbus libgdiplus wget
