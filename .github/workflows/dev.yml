@@ -27,9 +27,10 @@ jobs:
           with:
             buildkitd-flags: --debug
         - name: Set up QEMU
-          uses: docker/setup-qemu-action@v2
+          uses: docker/setup-qemu-action@v3
           with:
             platforms: arm64,amd64
+            image: tonistiigi/binfmt:qemu-v7.0.0-28
         - uses: docker/login-action@v2
           with:
             username: ${{ secrets.REPOSITORY_OWNER }}
