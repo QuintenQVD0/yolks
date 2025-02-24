@@ -15,7 +15,7 @@
 #    make install DESTDIR=/tmp/install
 
 
-FROM  debian:boookworm-slim
+FROM  debian:bookworm-slim
 
 RUN		dpkg --add-architecture armhf
 

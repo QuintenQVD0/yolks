@@ -1,4 +1,4 @@
-FROM debian:boookworm-slim
+FROM debian:bookworm-slim
 
 
 RUN		dpkg --add-architecture armhf
