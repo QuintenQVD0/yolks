@@ -10,11 +10,16 @@ RUN             dpkg --add-architecture i386 \
                 && apt install -y --no-install-recommends gnupg2 iproute2 wget numactl tzdata software-properties-common libntlm0 winbind xvfb xauth python3 libncurses5:i386 libncurses6:i386 libsdl2-2.0-0 libsdl2-2.0-0:i386 tightvncserver x11-xserver-utils xfonts-base debian-keyring debian-archive-keyring apt-transport-https curl xloadimage novnc
 
 # Install wine staging
+# Install wine and with recommends
 RUN             mkdir -pm755 /etc/apt/keyrings
 RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
 RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
 RUN             apt update
-RUN             apt install --install-recommends winehq-staging cabextract wine-binfmt -y
+RUN             apt install --install-recommends wine-staging-i386=10.1~bookworm-1 -y && \
+                apt install --install-recommends wine-staging-amd64=10.1~bookworm-1 -y && \
+                apt install --install-recommends wine-staging=10.1~bookworm-1 -y && \
+                apt install --install-recommends winehq-staging=10.1~bookworm-1 -y && \
+                apt install --install-recommends cabextract wine-binfmt -y
 RUN             apt install -y surf openbox
 RUN             rm -rf /var/lib/apt/lists/*
 
