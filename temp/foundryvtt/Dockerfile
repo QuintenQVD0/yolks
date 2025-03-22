@@ -10,7 +10,7 @@ RUN   apt update \
         &&   apt upgrade -y
 
 ## install dependencies
-RUN   apt install -y iproute2 tar libssl1.1 curl git libncurses5-dev libncursesw5-dev 
+RUN   apt install -y iproute2 tar curl git libncurses5-dev libncursesw5-dev 
 
 RUN apt-get install -y \
     libffmpeg-dev \
