@@ -87,6 +87,7 @@ jobs:
           - rathena
           - "472942239040012288"
           - "experimental"
+          - "foundryvtt"
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
