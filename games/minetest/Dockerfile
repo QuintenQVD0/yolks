@@ -1,4 +1,4 @@
-FROM --platform=$TARGETOS/$TARGETARCH ubuntu:20.04
+FROM --platform=$TARGETOS/$TARGETARCH ubuntu:24.04
 
 ENV         DEBIAN_FRONTEND=noninteractive
 
