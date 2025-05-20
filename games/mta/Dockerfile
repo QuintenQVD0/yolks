@@ -1,0 +1,44 @@
+FROM  --platform=$TARGETOS/$TARGETARCH debian:bookworm
+ENV   DEBIAN_FRONTEND=noninteractive
+
+## add container user
+RUN   useradd -m -d /home/container -s /bin/bash container
+
+## update base packages
+RUN   apt update && \
+      apt upgrade -y
+
+## install dependencies
+RUN   apt install -y iproute2 \
+        curl \
+        git \
+        zip \
+        unzip \
+        tar \
+        xz-utils \
+        apt-transport-https \
+        openssl \
+        libssl3 \
+        default-libmysqlclient-dev \
+        libmysqlclient-dev \
+        libreadline-dev \
+        libncurses-dev \
+        libtool \
+        python3  \
+        locales \
+        ffmpeg \
+        libc6 \
+        binutils \
+        liblua5.1-0 \ 
+
+RUN   wget http://ftp.de.debian.org/debian/pool/main/m/mysql-8.0/libmysqlclient21_8.0.42-1_amd64.deb \
+        && dpkg -i ibmysqlclient21_8.0.42-1_amd64.deb \
+        && rm ibmysqlclient21_8.0.42-1_amd64.deb
+## configure locale
+RUN   update-locale lang=en_US.UTF-8 && \
+      dpkg-reconfigure --frontend noninteractive locales
+
+WORKDIR /home/container
+
+COPY  ./entrypoint.sh /entrypoint.sh
+CMD   [ "/bin/bash", "/entrypoint.sh" ]
