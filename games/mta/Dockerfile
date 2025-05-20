@@ -20,7 +20,7 @@ RUN   apt install -y iproute2 \
         openssl \
         libssl3 \
         default-libmysqlclient-dev \
-        libmysqlclient-dev \
+        libmariadb-dev-compat \
         libreadline-dev \
         libncurses-dev \
         libtool \
