@@ -11,6 +11,7 @@ RUN   apt update && \
 ## install dependencies
 RUN   apt install -y iproute2 \
         curl \
+        wget \
         git \
         zip \
         unzip \
