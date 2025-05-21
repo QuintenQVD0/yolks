@@ -32,9 +32,10 @@ RUN   apt install -y iproute2 \
         binutils \
         liblua5.1-0 
 
-RUN   wget http://ftp.de.debian.org/debian/pool/main/m/mysql-8.0/libmysqlclient21_8.0.42-1_amd64.deb \
-        && dpkg -i libmysqlclient21_8.0.42-1_amd64.deb \
-        && rm libmysqlclient21_8.0.42-1_amd64.deb
+RUN   wget http://repo.mysql.com/apt/debian/pool/mysql-8.0/m/mysql-community/libmysqlclient21_8.0.42-1debian12_amd64.deb \
+        && dpkg -i libmysqlclient21_8.0.42-1debian12_amd64.deb \
+        && rm libmysqlclient21_8.0.42-1debian12_amd64.deb
+
 ## configure locale
 RUN   update-locale lang=en_US.UTF-8 && \
       dpkg-reconfigure --frontend noninteractive locales
