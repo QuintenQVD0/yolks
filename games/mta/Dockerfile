@@ -32,6 +32,14 @@ RUN   apt install -y iproute2 \
         binutils \
         liblua5.1-0 
 
+RUN   wget http://repo.mysql.com/apt/debian/pool/mysql-8.0/m/mysql-community/mysql-common_8.0.42-1debian12_amd64.deb \
+        && dpkg -i mysql-common_8.0.42-1debian12_amd64.debb \
+        && rm mysql-common_8.0.42-1debian12_amd64.deb
+
+        RUN   wget http://repo.mysql.com/apt/debian/pool/mysql-8.0/m/mysql-community/mysql-community-client-plugins_8.0.42-1debian12_amd64.deb \
+        && dpkg -i mysql-community-client-plugins_8.0.42-1debian12_amd64.deb \
+        && rm mysql-community-client-plugins_8.0.42-1debian12_amd64.deb
+
 RUN   wget http://repo.mysql.com/apt/debian/pool/mysql-8.0/m/mysql-community/libmysqlclient21_8.0.42-1debian12_amd64.deb \
         && dpkg -i libmysqlclient21_8.0.42-1debian12_amd64.deb \
         && rm libmysqlclient21_8.0.42-1debian12_amd64.deb
