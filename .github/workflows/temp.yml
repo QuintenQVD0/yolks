@@ -86,7 +86,8 @@ jobs:
           - pavlov_vr
           - rathena
           - "experimental"
-          - "experimental_v2"          
+          - "experimental_v2"
+          - "java_21"   
     steps:
       - uses: actions/checkout@v4
       - name: Set up QEMU
