@@ -72,6 +72,33 @@ fi
 # apply the new openbox config
 sed -i '14s|.*|openbox --config-file /rc.xml \&|' /home/container/.vnc/xstartup
 
+# Set the path for the certificate file
+CERT_FILE="self.pem"
+
+# Extract region (ST) and city (L) from TZ
+if [[ "$TZ" == *"/"* ]]; then
+  REGION="${TZ%%/*}"  # Part before /
+  CITY="${TZ#*/}"     # Part after /
+else
+  # Fallback for single-value timezones like UTC
+  REGION="UTC"
+  CITY="City"         # Default city placeholder
+fi
+
+# Replace underscores with spaces for nicer display
+CITY="${CITY//_/ }"
+REGION="${REGION//_/ }"
+
+# Generate the certificate if it doesn't exist
+if [ ! -f "$CERT_FILE" ]; then
+  echo "Generating self-signed certificate at $CERT_FILE (valid 5 years)..."
+  openssl req -new -x509 -days 1825 -nodes -out "$CERT_FILE" -keyout "$CERT_FILE" \
+  -subj "/C=EU/ST=${REGION}/L=${CITY}/O=MyOrg/OU=IT/CN=${SERVER_IP}"
+  echo "Certificate generated successfully."
+else
+  echo "Certificate $CERT_FILE already exists. Skipping generation."
+fi
+
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Installing" -rfbauth /home/container/.vnc/passwd -localhost

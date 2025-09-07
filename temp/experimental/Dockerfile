@@ -15,10 +15,10 @@ RUN             mkdir -pm755 /etc/apt/keyrings
 RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
 RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
 RUN             apt update
-RUN             apt install --install-recommends wine-staging-i386=10.1~bookworm-1 -y && \
-                apt install --install-recommends wine-staging-amd64=10.1~bookworm-1 -y && \
-                apt install --install-recommends wine-staging=10.1~bookworm-1 -y && \
-                apt install --install-recommends winehq-staging=10.1~bookworm-1 -y && \
+RUN             apt install --install-recommends wine-staging-i386=10.14~bookworm-1 -y && \
+                apt install --install-recommends wine-staging-amd64=10.14~bookworm-1 -y && \
+                apt install --install-recommends wine-staging=10.14~bookworm-1 -y && \
+                apt install --install-recommends winehq-staging=10.14~bookworm-1 -y && \
                 apt install --install-recommends cabextract wine-binfmt -y
 RUN             apt install -y surf openbox
 RUN             rm -rf /var/lib/apt/lists/*
@@ -27,10 +27,8 @@ RUN             rm -rf /var/lib/apt/lists/*
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
 
-# Download custom reverse proxy to allow the web dashboard to be avaible to the public
-RUN            wget -q -O /usr/sbin/reverse_proxy_linux_x64 https://github.com/QuintenQVD0/fs-reverse-proxy/releases/download/v1.0.0/reverse_proxy_linux_x64 \
-               && chmod +x /usr/sbin/reverse_proxy_linux_x64
-
+RUN             update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/surf 200 \
+                && update-alternatives --config x-www-browser               
        
 ENV         WINEPREFIX=/home/container/.wine
 ENV         WINEDLLOVERRIDES="mscoree=d,mshtml="
@@ -40,6 +38,7 @@ WORKDIR     /home/container
 
 
 ADD         FarmingSimulator25.png /FarmingSimulator25.png
+ADD         rc.xml /rc.xml
 ADD         index.html /usr/share/novnc/index.html
 ADD         entrypoint.sh /entrypoint.sh
 CMD             [ "/bin/bash", "/entrypoint.sh" ]

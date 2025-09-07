@@ -69,9 +69,39 @@ else
   echo "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
 fi
 
+# apply the new openbox config
+sed -i '14s|.*|openbox --config-file /rc.xml \&|' /home/container/.vnc/xstartup
+
+# Set the path for the certificate file
+CERT_FILE="self.pem"
+
+# Extract region (ST) and city (L) from TZ
+if [[ "$TZ" == *"/"* ]]; then
+  REGION="${TZ%%/*}"  # Part before /
+  CITY="${TZ#*/}"     # Part after /
+else
+  # Fallback for single-value timezones like UTC
+  REGION="UTC"
+  CITY="City"         # Default city placeholder
+fi
+
+# Replace underscores with spaces for nicer display
+CITY="${CITY//_/ }"
+REGION="${REGION//_/ }"
+
+# Generate the certificate if it doesn't exist
+if [ ! -f "$CERT_FILE" ]; then
+  echo "Generating self-signed certificate at $CERT_FILE (valid 5 years)..."
+  openssl req -new -x509 -days 1825 -nodes -out "$CERT_FILE" -keyout "$CERT_FILE" \
+  -subj "/C=EU/ST=${REGION}/L=${CITY}/O=MyOrg/OU=IT/CN=${SERVER_IP}"
+  echo "Certificate generated successfully."
+else
+  echo "Certificate $CERT_FILE already exists. Skipping generation."
+fi
+
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Installing" -rfbauth /home/container/.vnc/passwd -localhost
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
     # Check if the directory is writable and the file exists
      
@@ -86,7 +116,7 @@ elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Activate / Update" -rfbauth /home/container/.vnc/passwd -localhost
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
 
     echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
@@ -95,7 +125,7 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Farming Simulator 22/25 Server" -rfbauth /home/container/.vnc/passwd -localhost
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
 
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
