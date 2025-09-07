@@ -5,6 +5,8 @@ cd /home/container || exit
 
 print_message() {
   local message="$1"
+  # Replace literal \n with actual newlines
+  message=$(echo -e "$message")
   cat << EOF
 ==============================
 Information
@@ -16,6 +18,55 @@ ${message}
 EOF
 }
 
+# Log/Color Echo function
+cecho() {
+    local level="$1"
+    local text="$2"
+    local reset="\033[0m"
+
+    case "$level" in
+        info|white)
+            code="\033[97m"
+            prefix="[INFO] "
+            ;;
+        warning|yellow)
+            code="\033[33m"
+            prefix="[WARNING] "
+            ;;
+        error|red)
+            code="\033[31m"
+            prefix="[ERROR] "
+            ;;
+        success|green)
+            code="\033[32m"
+            prefix="[SUCCESS] "
+            ;;
+        system|cyan)
+            code="\033[36m"
+            prefix="[SYSTEM] "
+            ;;
+        blue)
+            code="\033[34m"
+            prefix="[BLUE] "
+            ;;
+        magenta)
+            code="\033[35m"
+            prefix="[MAGENTA] "
+            ;;
+        bold)
+            code="\033[1m"
+            prefix=""
+            ;;
+        *)
+            code="$reset"
+            prefix=""
+            ;;
+    esac
+
+    echo -e "${code}${prefix}${text}${reset}"
+}
+
+
 start_vnc() {
     local name="$1"
     /usr/bin/vncserver -geometry 1920x1080 -rfbport 5900 -name "$name" -rfbauth /home/container/.vnc/passwd -localhost
@@ -24,9 +75,9 @@ start_vnc() {
 
 
 # Display system information
-echo "Running on Debian version: $(cat /etc/debian_version)"
-echo "Current timezone: $(cat /etc/timezone)"
-echo "Wine version: $(wine --version)"
+cecho system "Running on Debian version: $(cat /etc/debian_version)"
+cecho system "Current timezone: $(cat /etc/timezone)"
+cecho system "Wine version: $(wine --version)"
 
 # Make internal Docker IP address available to processes
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
@@ -41,27 +92,14 @@ export WINEPREFIX=/home/container/.wine
 #export XDG_RUNTIME_DIR="/home/container/.cache"
 
 # Ensure Wine prefix directory exists
-echo "Creating Wine prefix directory..."
+cecho info "Creating Wine prefix directory..."
 mkdir -p "$WINEPREFIX"
 
 # Set new VNC password if available
 if [ -f /home/container/.vnc/passwd ]; then
-    echo "Setting VNC password..."
+    cecho info "Setting VNC password..."
     echo "${VNC_PASS}" | vncpasswd -f > /home/container/.vnc/passwd
 fi
-
-# Check if wine-mono required and install it if so
-if [[ $WINETRICKS_RUN =~ movo ]]; then
-        echo "Installing mono"
-        WINETRICKS_RUN=${WINETRICKS_RUN/mono}
-
-        if [ ! -f "$WINEPREFIX/mono.msi" ]; then
-                wget -q -O $WINEPREFIX/mono.msi https://dl.winehq.org/wine/wine-mono/9.4.0/wine-mono-9.4.0-x86.msi
-        fi
-
-        wine msiexec /i $WINEPREFIX/mono.msi /qn /quiet /norestart /log $WINEPREFIX/mono_install.log
-fi
-
 
 # Install additional Winetricks
 for trick in $WINETRICKS_RUN; do
@@ -70,11 +108,11 @@ for trick in $WINETRICKS_RUN; do
 done
 
 # Kill any old VNC sessions if running
-echo "Killing any existing VNC sessions..."
+cecho info "Killing any existing VNC sessions..."
 [ -z "${DISPLAY}" ] || /usr/bin/vncserver -kill "${DISPLAY}"
 
 # Clean up potential leftover lock files
-echo "Removing leftover VNC lock files..."
+cecho info "Removing leftover VNC lock files..."
 find /tmp -maxdepth 1 -name ".X*-lock" -type f -exec rm -f {} \;
 if [[ -d /tmp/.X11-unix ]]; then
     find /tmp/.X11-unix -maxdepth 1 -name 'X*' -type s -exec rm -f {} \;
@@ -84,9 +122,9 @@ fi
 if [[ "${FS_VERSION}" != "22" && "${FS_VERSION}" != "25" ]]; then
   # Set FS_VERSION to 25
   FS_VERSION="25"
-  echo "FS_VERSION is set to 25"
+  cecho warning "FS_VERSION was invalid so defaulted to 25"
 else
-  echo "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
+  cecho info "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
 fi
 
 # apply the new openbox config
@@ -111,12 +149,12 @@ REGION="${REGION//_/ }"
 
 # Generate the certificate if it doesn't exist
 if [ ! -f "$CERT_FILE" ]; then
-  echo "Generating self-signed certificate at $CERT_FILE (valid 5 years)..."
+  cecho info "Generating self-signed certificate at $CERT_FILE (valid 5 years)..."
   openssl req -new -x509 -days 1825 -nodes -out "$CERT_FILE" -keyout "$CERT_FILE" \
   -subj "/C=EU/ST=${REGION}/L=${CITY}/O=MyOrg/OU=IT/CN=${SERVER_IP}"
-  echo "Certificate generated successfully."
+  cecho success "Certificate generated successfully."
 else
-  echo "Certificate $CERT_FILE already exists. Skipping generation."
+  cecho success "Certificate $CERT_FILE already exists. Skipping generation."
 fi
 
 # Handle various progression states
@@ -146,13 +184,13 @@ elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
 else
     # Unrecognized progression state
-    echo "Error: The PROGRESSION variable is set to an unknown value."
+    cecho error "Error: The PROGRESSION variable is set to an unknown value."
     STARTCMD="sleep 50"
     exit 1
 
 fi
 
-echo "Starting with command: ${STARTCMD}"
+cecho bold "Starting with command: ${STARTCMD}"
 eval "${STARTCMD}"
 
 # Keep session alive if needed
