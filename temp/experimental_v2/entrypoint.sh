@@ -71,7 +71,7 @@ fi
 
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Installing" -rfbauth /home/container/.vnc/passwd -localhost
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
     # Check if the directory is writable and the file exists
      
@@ -86,7 +86,7 @@ elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Activate VNC and set the start command for the game
     echo "Activating VNC server..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Activate / Update" -rfbauth /home/container/.vnc/passwd -localhost
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
 
     echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
@@ -95,7 +95,7 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Prepare the startup command using environment variables
     echo "Preparing startup command..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Farming Simulator 22/25 Server" -rfbauth /home/container/.vnc/passwd -localhost
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
 
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')

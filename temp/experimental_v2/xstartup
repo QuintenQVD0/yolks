@@ -11,4 +11,4 @@ export DISPLAY=:1
 xloadimage -fullscreen -onroot /FarmingSimulator25.png
 
 # Start Openbox window manager
-openbox &
+openbox  --config-file /rc.xml &

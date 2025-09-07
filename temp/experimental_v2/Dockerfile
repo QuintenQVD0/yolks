@@ -16,7 +16,7 @@ RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.o
 RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
 RUN             apt update
 RUN             apt install --install-recommends winehq-staging cabextract wine-binfmt -y
-RUN             apt install -y surf openbox tint2 idesk
+RUN             apt install -y surf openbox pcmanfm
 RUN             rm -rf /var/lib/apt/lists/*
 
 # Set up Winetricks
@@ -32,6 +32,7 @@ WORKDIR     /home/container
 
 
 ADD         FarmingSimulator25.png /FarmingSimulator25.png
+ADD         rc.xml /rc.xml
 ADD         index.html /usr/share/novnc/index.html
 ADD         entrypoint.sh /entrypoint.sh
 CMD             [ "/bin/bash", "/entrypoint.sh" ]
