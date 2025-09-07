@@ -69,6 +69,9 @@ else
   echo "FS_VERSION is to Farming Simulator 20${FS_VERSION}"
 fi
 
+# apply the new openbox config
+sed -i '14s|.*|openbox --config-file /rc.xml \&|' /home/container/.vnc/xstartup
+
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Installing" -rfbauth /home/container/.vnc/passwd -localhost

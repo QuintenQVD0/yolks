@@ -16,14 +16,16 @@ RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.o
 RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
 RUN             apt update
 RUN             apt install --install-recommends winehq-staging cabextract wine-binfmt -y
-RUN             apt install -y surf openbox pcmanfm
+RUN             apt install -y surf openbox plank
 RUN             rm -rf /var/lib/apt/lists/*
 
 # Set up Winetricks
 RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
 
-       
+RUN             update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/surf 200 \
+                && update-alternatives --config x-www-browser
+        
 ENV         WINEPREFIX=/home/container/.wine
 ENV         WINEDLLOVERRIDES="mscoree=d,mshtml="
 USER        container
