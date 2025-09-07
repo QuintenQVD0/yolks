@@ -32,6 +32,10 @@ echo "Wine version: $(wine --version)"
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
 
+if ! [ "$INTERNAL_IP" == "10.0.0.41" ]; then
+  export DISPLAY=":1"
+fi
+
 # Define Wine prefix path
 export WINEPREFIX=/home/container/.wine
 #export XDG_RUNTIME_DIR="/home/container/.cache"
