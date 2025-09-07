@@ -3,6 +3,26 @@
 # Set working directory
 cd /home/container || exit
 
+print_message() {
+  local message="$1"
+  cat << EOF
+==============================
+Information
+==============================
+
+${message}
+
+==============================
+EOF
+}
+
+start_vnc() {
+    local name="$1"
+    /usr/bin/vncserver -geometry 1920x1080 -rfbport 5900 -name "$name" -rfbauth /home/container/.vnc/passwd -localhost
+    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
+}
+
+
 # Display system information
 echo "Running on Debian version: $(cat /etc/debian_version)"
 echo "Current timezone: $(cat /etc/timezone)"
@@ -11,10 +31,6 @@ echo "Wine version: $(wine --version)"
 # Make internal Docker IP address available to processes
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP
-
-if ! [ "$INTERNAL_IP" == "10.0.0.41" ]; then
-    export DISPLAY=":1"
-fi
 
 # Define Wine prefix path
 export WINEPREFIX=/home/container/.wine
@@ -101,10 +117,9 @@ fi
 
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Installing" -rfbauth /home/container/.vnc/passwd -localhost
-    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
-    # Check if the directory is writable and the file exists
-     
+    start_vnc "Installing"
+    
+    print_message "Starting the installation process. Please do NOT stop the server!\n\nTo monitor progress, visit: https://${SERVER_IP}:${VNC_PORT}"
     STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
 
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
@@ -115,19 +130,15 @@ elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
 
 elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ]; then
     # Activate VNC and set the start command for the game
-    echo "Activating VNC server..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Activate / Update" -rfbauth /home/container/.vnc/passwd -localhost
-    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
+    start_vnc "Activate / Update"
 
-    echo "Starting the activation proces, please connect to the VNC server to enter your licence key..."
+    print_message "Starting the activation process. Please connect to the VNC server to enter your license key.\n\nConnect here: https://${SERVER_IP}:${VNC_PORT}"    STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
     STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
-    
-elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
-    # Prepare the startup command using environment variables
-    echo "Preparing startup command..."
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -name "Farming Simulator 22/25 Server" -rfbauth /home/container/.vnc/passwd -localhost
-    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
 
+elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
+    start_vnc "Farming Simulator 22/25 Server"
+
+    print_message "You can now configure the server on the dashboard.\n\nConnect to the VNC server here: https://${SERVER_IP}:${VNC_PORT}"
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
 else
     # Unrecognized progression state
@@ -137,22 +148,10 @@ else
 
 fi
 
-if [ "${PROGRESSION}" == "ACTIVATE" ] || [ "${PROGRESSION}" == "INSTALL_DLC" ]; then
+echo "Starting with command: ${STARTCMD}"
+eval "${STARTCMD}"
 
-    # Echo the final startup command
-    echo "Starting with command: ${STARTCMD}"
-
-    # Execute the startup command
-    eval "${STARTCMD}"
-
-    # Keep the session alive after the executable exits
+# Keep session alive if needed
+if [[ "$PROGRESSION" == "ACTIVATE" || "$PROGRESSION" == "INSTALL_DLC" ]]; then
     tail -f /dev/null
-else
-
-    # Echo the final startup command
-    echo "Starting with command: ${STARTCMD}"
-
-    # Execute the startup command
-    eval "${STARTCMD}"
-
 fi
