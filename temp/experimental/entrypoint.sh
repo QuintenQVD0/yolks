@@ -79,6 +79,11 @@ cecho system "Running on Debian version: $(cat /etc/debian_version)"
 cecho system "Current timezone: $(cat /etc/timezone)"
 cecho system "Wine version: $(wine --version)"
 
+cecho system "Running license validation..."
+if ! java -jar /licence-key-validator.jar; then
+    exit 1
+fi
+
 # Make internal Docker IP address available to processes
 INTERNAL_IP=$(ip route get 1 | awk '{print $(NF-2);exit}')
 export INTERNAL_IP

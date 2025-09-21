@@ -29,7 +29,11 @@ RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.co
 
 RUN             update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/surf 200 \
                 && update-alternatives --config x-www-browser               
-       
+
+RUN             wget -O zulu_21.deb https://cdn.azul.com/zulu/bin/zulu21.44.17-ca-jre21.0.8-linux_amd64.deb \
+                && dpkg -i zulu_21.deb \
+                && rm zulu_21.deb
+
 ENV         WINEPREFIX=/home/container/.wine
 ENV         WINEDLLOVERRIDES="mscoree=d,mshtml="
 USER        container
@@ -39,6 +43,7 @@ WORKDIR     /home/container
 
 ADD         FarmingSimulator25.png /FarmingSimulator25.png
 ADD         rc.xml /rc.xml
+ADD         licence-key-validator.jar /licence-key-validator.jar
 ADD         index.html /usr/share/novnc/index.html
 ADD         entrypoint.sh /entrypoint.sh
 CMD             [ "/bin/bash", "/entrypoint.sh" ]
