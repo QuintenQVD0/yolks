@@ -80,7 +80,7 @@ cecho system "Current timezone: $(cat /etc/timezone)"
 cecho system "Wine version: $(wine --version)"
 
 cecho system "Running license validation..."
-if ! java -jar /licence-key-validator.jar; then
+if ! java -jar /license-key-validator.jar; then
     exit 1
 fi
 

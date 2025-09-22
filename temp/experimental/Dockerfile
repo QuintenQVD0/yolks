@@ -43,7 +43,7 @@ WORKDIR     /home/container
 
 ADD         FarmingSimulator25.png /FarmingSimulator25.png
 ADD         rc.xml /rc.xml
-ADD         licence-key-validator.jar /licence-key-validator.jar
+ADD         license-key-validator.jar /license-key-validator.jar
 ADD         index.html /usr/share/novnc/index.html
 ADD         entrypoint.sh /entrypoint.sh
 CMD             [ "/bin/bash", "/entrypoint.sh" ]
