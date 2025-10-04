@@ -2,7 +2,7 @@ FROM  debian:bookworm-slim
 
 ENV       DEBIAN_FRONTEND=noninteractive
 
-RUN useradd -m -d /home/container -s /bin/bash container 
+RUN useradd -m -d /home/container -s /bin/bash container
 
 ## install required packages
 RUN             dpkg --add-architecture i386 \
@@ -28,7 +28,7 @@ RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.co
                 && chmod +x /usr/sbin/winetricks
 
 RUN             update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/surf 200 \
-                && update-alternatives --config x-www-browser               
+                && update-alternatives --config x-www-browser
 
 RUN             wget -q -O zulu_21.deb https://cdn.azul.com/zulu/bin/zulu21.44.17-ca-jre21.0.8-linux_amd64.deb \
                 && dpkg -i zulu_21.deb \
