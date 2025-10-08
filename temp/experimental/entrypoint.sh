@@ -69,9 +69,23 @@ cecho() {
 
 start_vnc() {
     local name="$1"
+
+    # Validate VNC_PORT
+    if [[ -z "${VNC_PORT}" ]]; then
+        cecho error "❌ Error: VNC_PORT is not set."
+        return 1
+    fi
+
+    if ! [[ "${VNC_PORT}" =~ ^[0-9]+$ ]] || (( VNC_PORT < 1025 || VNC_PORT > 65535 )); then
+        cecho error "❌ Error: VNC_PORT must be a valid non-privileged TCP port number (1025–65535)."
+        return 1
+    fi
+
     /usr/bin/vncserver -geometry 1920x1080 -rfbport 5900 -name "$name" -rfbauth /home/container/.vnc/passwd -localhost
-    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
+	sleep 5
+    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" --log-file "/home/container/.vnc/websockify.txt" localhost:5900
 }
+
 
 
 # Display system information
@@ -152,15 +166,21 @@ fi
 CITY="${CITY//_/ }"
 REGION="${REGION//_/ }"
 
-# Generate the certificate if it doesn't exist
-if [ ! -f "$CERT_FILE" ]; then
-  cecho info "Generating self-signed certificate at $CERT_FILE (valid 5 years)..."
-  openssl req -new -x509 -days 1825 -nodes -out "$CERT_FILE" -keyout "$CERT_FILE" \
-  -subj "/C=EU/ST=${REGION}/L=${CITY}/O=MyOrg/OU=IT/CN=${SERVER_IP}"
-  cecho success "Certificate generated successfully."
+# Skip SSL generation if nossl.txt exists
+if [ -f "/home/container/nossl.txt" ]; then
+  cecho warning "SSL generation skipped because /home/container/nossl.txt exists."
 else
-  cecho success "Certificate $CERT_FILE already exists. Skipping generation."
+  # Generate the certificate if it doesn't exist
+  if [ ! -f "$CERT_FILE" ]; then
+    cecho info "Generating self-signed certificate at $CERT_FILE (valid 5 years)..."
+    openssl req -new -x509 -days 1825 -nodes -out "$CERT_FILE" -keyout "$CERT_FILE" \
+      -subj "/C=EU/ST=${REGION}/L=${CITY}/O=MyOrg/OU=IT/CN=${SERVER_IP}"
+    cecho success "Certificate generated successfully."
+  else
+    cecho success "Certificate $CERT_FILE already exists. Skipping generation."
+  fi
 fi
+
 
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
@@ -179,7 +199,7 @@ elif [ "${PROGRESSION}" == "ACTIVATE" ] && [ -f "/home/container/.vnc/passwd" ];
     # Activate VNC and set the start command for the game
     start_vnc "Activate / Update"
 
-    print_message "Starting the activation process. Please connect to the VNC server to enter your license key.\n\nConnect here: https://${SERVER_IP}:${VNC_PORT}"    STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
+    print_message "Starting the activation process. Please connect to the VNC server to enter your license key.\n\nConnect here: https://${SERVER_IP}:${VNC_PORT}"
     STARTCMD="wine /home/container/Farming\ Simulator\ 20${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe"
 
 elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
