@@ -26,45 +26,29 @@ cecho() {
 
     case "$level" in
         info|white)
-            code="\033[97m"
-            prefix="[INFO] "
-            ;;
+            code="\033[97m"; prefix="[INFO] " ;;
         warning|yellow)
-            code="\033[33m"
-            prefix="[WARNING] "
-            ;;
+            code="\033[33m"; prefix="[WARNING] " ;;
         error|red)
-            code="\033[31m"
-            prefix="[ERROR] "
-            ;;
+            code="\033[31m"; prefix="[ERROR] " ;;
         success|green)
-            code="\033[32m"
-            prefix="[SUCCESS] "
-            ;;
+            code="\033[32m"; prefix="[SUCCESS] " ;;
         system|cyan)
-            code="\033[36m"
-            prefix="[SYSTEM] "
-            ;;
+            code="\033[36m"; prefix="[SYSTEM] " ;;
         blue)
-            code="\033[34m"
-            prefix="[BLUE] "
-            ;;
+            code="\033[34m"; prefix="[BLUE] " ;;
         magenta)
-            code="\033[35m"
-            prefix="[MAGENTA] "
-            ;;
+            code="\033[35m"; prefix="[MAGENTA] " ;;
         bold)
-            code="\033[1m"
-            prefix=""
-            ;;
+            code="\033[1m"; prefix="" ;;
         *)
-            code="$reset"
-            prefix=""
-            ;;
+            code="$reset"; prefix="" ;;
     esac
 
-    echo -e "${code}${prefix}${text}${reset}"
+    # Use printf instead of echo -e
+    printf "%b%s%s%b\n" "${code}" "${prefix}" "${text}" "${reset}"
 }
+
 
 
 start_vnc() {
