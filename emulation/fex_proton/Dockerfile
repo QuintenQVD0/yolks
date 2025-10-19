@@ -40,6 +40,7 @@ RUN         rm /var/lib/dbus/machine-id
 RUN         dbus-uuidgen --ensure
 
 WORKDIR /home/container
+ENV         USER=container HOME=/home/container
 
 COPY  ./entrypoint.sh /entrypoint.sh
 CMD   [ "/bin/bash", "/entrypoint.sh" ]

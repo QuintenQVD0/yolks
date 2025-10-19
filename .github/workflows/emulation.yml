@@ -21,6 +21,7 @@ jobs:
           - emulation
           - box_proton
           - fex_proton
+          - fex_proton_latest
     steps:
       - uses: actions/checkout@v4
       - uses: docker/setup-qemu-action@v3

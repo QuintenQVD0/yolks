@@ -61,7 +61,7 @@ start_vnc() {
     fi
 
     if ! [[ "${VNC_PORT}" =~ ^[0-9]+$ ]] || (( VNC_PORT < 1025 || VNC_PORT > 65535 )); then
-        cecho error "❌ Error: VNC_PORT must be a valid non-privileged TCP port number (1025–65535)."
+        cecho error "❌ Error: VNC_PORT must be a valid non-privileged TCP port number (1025-65535)."
         return 1
     fi
 
