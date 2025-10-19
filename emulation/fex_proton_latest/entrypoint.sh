@@ -72,13 +72,28 @@ if [ -f "/home/container/Config.json" ]; then
         log_info "Using Steam user: ${STEAM_USER}"
     fi
 
+    # Set environment for Steam Proton
+    if [ -f "/usr/local/bin/proton" ]; then
+        if [ ! -z ${SRCDS_APPID} ]; then
+            mkdir -p /home/container/.steam/steam/steamapps/compatdata/${SRCDS_APPID}
+            export STEAM_COMPAT_CLIENT_INSTALL_PATH="/home/container/.steam/steam"
+            export STEAM_COMPAT_DATA_PATH="/home/container/.steam/steam/steamapps/compatdata/${SRCDS_APPID}"
+        else
+            log_warn "----------------------------------------------------------------------------------"
+            log_warn "WARNING!!! Proton needs variable SRCDS_APPID, else it will not work. Please add it"
+            log_warn "Server stops now"
+            log_warn "----------------------------------------------------------------------------------"
+            exit 0
+            fi
+    fi
+
     # Auto update block (original logic restored)
     if [ -z "${AUTO_UPDATE}" ] || [ "${AUTO_UPDATE}" == "1" ]; then
         if [ -n "${SRCDS_APPID}" ]; then
             log_info "Auto-updating game server (AppID: ${SRCDS_APPID})"
             export HOME="/home/container"
             if [ "${STEAM_USER}" == "anonymous" ]; then
-                FEXInterpreter ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
+                FEX ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
                 $( [[ "${WINDOWS_INSTALL}" == "1" ]] && printf %s '+@sSteamCmdForcePlatformType windows' ) \
                 +app_update ${SRCDS_APPID} \
                 $( [[ -z "${SRCDS_BETAID}" ]] || printf %s "-beta ${SRCDS_BETAID}" ) \
@@ -87,7 +102,7 @@ if [ -f "/home/container/Config.json" ]; then
                 ${INSTALL_FLAGS} \
                 $( [[ "${VALIDATE}" == "1" ]] && printf %s 'validate' ) +quit
             else
-                FEXInterpreter ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
+                FEX ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
                 $( [[ "${WINDOWS_INSTALL}" == "1" ]] && printf %s '+@sSteamCmdForcePlatformType windows' ) \
                 +app_update ${SRCDS_APPID} \
                 $( [[ -z "${SRCDS_BETAID}" ]] || printf %s "-beta ${SRCDS_BETAID}" ) \
