@@ -169,6 +169,9 @@ fi
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     start_vnc "Installing"
+
+	cecho info "Files that are in the mount:"
+	ls -la /fs
     
     print_message "Starting the installation process. Please do NOT stop the server!\n\nTo monitor progress, visit: https://${SERVER_IP}:${VNC_PORT}"
     STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
