@@ -8,8 +8,8 @@ RUN   useradd -m -d /home/container -s /bin/bash container
 RUN     apt update && apt -y install software-properties-common wget zenity libsdl2-2.0-0 libepoxy0 libgl1 binfmt-support squashfuse squashfs-tools curl \
         && apt update \
         && apt -y install qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs libqt5core5a libqt5gui5 libqt5qml5 libqt5quick5 libqt5widgets5 \
-        && wget -q https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-armv8.0_2510~1~j_arm64.deb \
-		&& dpkg -i fex-emu-armv8.0_2510~1~j_arm64.deb && rm fex-emu-armv8.0_2510~1~j_arm64.deb \
+        && wget -q https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-armv8.0_2511~j_arm64.deb \
+		&& dpkg -i fex-emu-armv8.0_2511~j_arm64.deb && rm fex-emu-armv8.0_2511~j_arm64.deb \
         && mkdir -p /usr/lib/binfmt.d && cd /usr/lib/binfmt.d \
         && echo ":FEX-x86_64:M:0:\x7fELF\x02\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x3e\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\x00\x00\x00\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/FEXInterpreter:POCF" > FEX-x86_64.conf \
         && echo ":FEX-x86:M:0:\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x03\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\x00\x00\x00\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/FEXInterpreter:POCF" > FEX-x86.conf
