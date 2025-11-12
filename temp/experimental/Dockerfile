@@ -5,9 +5,16 @@ ENV       DEBIAN_FRONTEND=noninteractive
 RUN useradd -m -d /home/container -s /bin/bash container
 
 ## install required packages
-RUN             dpkg --add-architecture i386 \
-                && apt update -y \
-                && apt install -y --no-install-recommends gnupg2 iproute2 wget numactl tzdata software-properties-common libntlm0 winbind xvfb xauth python3 libncurses5:i386 libncurses6:i386 libsdl2-2.0-0 libsdl2-2.0-0:i386 tightvncserver x11-xserver-utils xfonts-base debian-keyring debian-archive-keyring apt-transport-https curl xloadimage novnc java-common 
+RUN dpkg --add-architecture i386 \
+            && apt update -y \
+            && apt install -y --no-install-recommends \
+                gnupg2 iproute2 wget numactl tzdata software-properties-common \
+                libntlm0 winbind xvfb xauth python3 libncurses5:i386 libncurses6:i386 libsdl2-2.0-0 libsdl2-2.0-0:i386 \
+                tightvncserver x11-xserver-utils xfonts-base debian-keyring debian-archive-keyring apt-transport-https \
+                curl xloadimage novnc java-common p7zip-full \
+            && apt clean \
+            && rm -rf /var/lib/apt/lists/*
+
 
 # Install wine staging
 # Install wine and with recommends
@@ -30,7 +37,7 @@ RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.co
 RUN             update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/surf 200 \
                 && update-alternatives --config x-www-browser
 
-RUN             wget -q -O zulu_21.deb https://cdn.azul.com/zulu/bin/zulu21.44.17-ca-jre21.0.8-linux_amd64.deb \
+RUN             wget -q -O zulu_21.deb https://cdn.azul.com/zulu/bin/zulu21.46.19-ca-jre21.0.9-linux_amd64.deb \
                 && dpkg -i zulu_21.deb \
                 && rm zulu_21.deb
 

@@ -170,12 +170,44 @@ fi
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
     start_vnc "Installing"
 
-	cecho info "Files that are in the mount:"
-	ls -la /fs
-    
-    print_message "Starting the installation process. Please do NOT stop the server!\n\nTo monitor progress, visit: https://${SERVER_IP}:${VNC_PORT}"
-    STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
+    cecho info "Files that are in the mount:"
+    ls -la /fs
 
+    print_message "Starting the installation process. Please do NOT stop the server!\n\nTo monitor progress, visit: https://${SERVER_IP}:${VNC_PORT}"
+
+    IMG_FILE=$(find /fs -maxdepth 1 -type f -iname "*.img" | head -n 1)
+    INSTALL_PATH="/fs/fs_img"
+
+    if [ -n "${IMG_FILE}" ]; then
+        cecho info "Found image file: ${IMG_FILE}"
+
+        # If already extracted, reuse it
+        if [ -d "${INSTALL_PATH}" ] && [ -f "${INSTALL_PATH}/Setup.exe" ]; then
+            cecho info "Detected existing extracted folder — skipping extraction."
+        else
+            cecho info "Extracting image file to ${INSTALL_PATH}..."
+            rm -rf "${INSTALL_PATH}"
+            mkdir -p "${INSTALL_PATH}"
+            7z x "${IMG_FILE}" -o"${INSTALL_PATH}" >/dev/null 2>&1
+
+            if [ $? -ne 0 ]; then
+                cecho error "Extraction failed for ${IMG_FILE}."
+                exit 1
+            fi
+
+            if [ ! -f "${INSTALL_PATH}/Setup.exe" ]; then
+                cecho error "Setup.exe not found after extraction!"
+                exit 1
+            fi
+
+            cecho success "Extraction complete. Found Setup.exe."
+        fi
+
+        STARTCMD="wine ${INSTALL_PATH}/Setup.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
+    else
+        cecho info "No .img file found. Using default installer."
+        STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
+    fi
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
     /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
