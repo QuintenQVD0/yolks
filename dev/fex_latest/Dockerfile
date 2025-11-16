@@ -8,8 +8,8 @@ RUN   useradd -m -d /home/container -s /bin/bash container
 RUN     apt update && apt -y install software-properties-common wget curl fuse zenity libsdl2-2.0-0 libepoxy0 libgl1 squashfuse binfmt-support \
         && apt update \
         && apt -y install qml-module-qtquick-controls qml-module-qtquick-controls2 qml-module-qtquick-dialogs libqt5core5a libqt5gui5 libqt5qml5 libqt5quick5 libqt5widgets5 \
-        && wget -q https://github.com/QuintenQVD0/squashfs-tools/releases/download/v4.7.4/squashfs-tools_4.7.4-1_arm64.deb 
-                && dpkg -i squashfs-tools_4.7.4-1_arm64.deb && rm squashfs-tools_4.7.4-1_arm64.deb \
+        && wget -q https://github.com/QuintenQVD0/squashfs-tools/releases/download/v4.7.4/squashfs-tools_4.7.4-1_arm64.deb \
+        && dpkg -i squashfs-tools_4.7.4-1_arm64.deb && rm squashfs-tools_4.7.4-1_arm64.deb \
         && wget -q https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/fex-emu-armv8.0/fex-emu-armv8.0_2511~j_arm64.deb \
 		&& dpkg -i fex-emu-armv8.0_2511~j_arm64.deb && rm fex-emu-armv8.0_2511~j_arm64.deb \
         && mkdir -p /usr/lib/binfmt.d && cd /usr/lib/binfmt.d \
@@ -29,3 +29,4 @@ WORKDIR /home/container
 
 COPY  ./entrypoint.sh /entrypoint.sh
 CMD   [ "/bin/bash", "/entrypoint.sh" ]
+
