@@ -16,8 +16,7 @@ RUN dpkg --add-architecture i386 \
             && rm -rf /var/lib/apt/lists/*
 
 
-# Install wine staging
-# Install wine and with recommends
+# Install wine 10.1 and with recommends
 RUN             mkdir -pm755 /etc/apt/keyrings
 RUN             wget -O /etc/apt/keyrings/winehq-archive.key https://dl.winehq.org/wine-builds/winehq.key
 RUN             wget -NP /etc/apt/sources.list.d/ https://dl.winehq.org/wine-builds/debian/dists/bookworm/winehq-bookworm.sources
@@ -31,11 +30,9 @@ RUN             apt install -y surf openbox
 RUN             rm -rf /var/lib/apt/lists/*
 
 # Set up Winetricks
-RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/Winetricks/winetricks/master/src/winetricks \
+RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.com/pelican-eggs/winetricks/master/src/winetricks \
                 && chmod +x /usr/sbin/winetricks
 
-RUN             update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/surf 200 \
-                && update-alternatives --config x-www-browser
 
 RUN             wget -q -O zulu_21.deb https://cdn.azul.com/zulu/bin/zulu21.46.19-ca-jre21.0.9-linux_amd64.deb \
                 && dpkg -i zulu_21.deb \

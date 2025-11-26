@@ -204,6 +204,9 @@ if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
         fi
 
         STARTCMD="wine ${INSTALL_PATH}/Setup.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
+    elif [ -e "/fs/Setup.exe"]
+        cecho info "Found an already extracted .img in the mount, using that"
+        STARTCMD="wine /fs/Setup.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
     else
         cecho info "No .img file found. Using default installer."
         STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
