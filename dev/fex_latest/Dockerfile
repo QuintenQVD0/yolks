@@ -17,7 +17,7 @@ RUN     apt update && apt -y install software-properties-common wget curl fuse z
         && echo ":FEX-x86:M:0:\x7fELF\x01\x01\x01\x00\x00\x00\x00\x00\x00\x00\x00\x00\x02\x00\x03\x00:\xff\xff\xff\xff\xff\xfe\xfe\x00\x00\x00\x00\xff\xff\xff\xff\xff\xfe\xff\xff\xff:/usr/bin/FEXInterpreter:POCF" > FEX-x86.conf
 
 RUN	apt update \ 
-        && apt -y install git iproute2 libssl-dev tzdata tar zip build-essential unzip gdb gettext screen numactl libc6 libstdc++6 \
+        && apt -y install git iproute2 libssl-dev tzdata tar zip build-essential unzip gdb gettext screen xvfb numactl libc6 libstdc++6 \
 		&& wget http://launchpadlibrarian.net/668077130/libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
   		&& dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
         && ls -la /usr/local/bin

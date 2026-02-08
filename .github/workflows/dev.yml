@@ -18,7 +18,7 @@ jobs:
         matrix:
           tag:
             - fex
-            - fex_rust
+            #- fex_rust
             - fex_fivem
             - fex_latest
       steps:
