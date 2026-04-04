@@ -39,14 +39,14 @@ else
     export FEX_APP_DATA_LOCATION="${FEX_ROOTFS_PATH}"
     export FEX_APP_CONFIG_LOCATION="/home/container/"
     export XDG_DATA_HOME="/home/container"
-    FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=22.04
+    FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=24.04
 fi
 
 # Generate Config.json if needed
-if [ -f "/home/container/rootfs/Ubuntu_22_04/break_chroot.sh" ] || \
-   [ -f "${FEX_ROOTFS_PATH}/RootFS/Ubuntu_22_04/break_chroot.sh" ]; then
+if [ -f "/home/container/rootfs/Ubuntu_24_04/break_chroot.sh" ] || \
+   [ -f "${FEX_ROOTFS_PATH}/RootFS/Ubuntu_24_04/break_chroot.sh" ]; then
     if [ ! -f "/home/container/Config.json" ]; then
-        echo '{"Config":{"RootFS":"Ubuntu_22_04"}}' > /home/container/Config.json
+        echo '{"Config":{"RootFS":"Ubuntu_24_04"}}' > /home/container/Config.json
         log_info "Generated missing Config.json"
     fi
 fi
