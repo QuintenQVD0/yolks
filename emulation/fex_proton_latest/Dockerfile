@@ -22,10 +22,10 @@ RUN	apt update \
   	&& dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
         && ls -la /usr/local/bin
 
-## install required packages
+## install required packages + (alsa-lib)
 RUN         apt update
 RUN         apt install -y --no-install-recommends libntlm0 winbind xauth libncurses6 dbus libgdiplus 
-RUN         apt install -y alsa-tools pulseaudio alsa-lib libao-common gnutls-bin gnupg numactl python3 python3-pip python3-setuptools xvfb
+RUN         apt install -y alsa-tools pulseaudio libao-common gnutls-bin gnupg numactl python3 python3-pip python3-setuptools xvfb
 
 RUN     wget -q https://github.com/QuintenQVD0/rcon-cli/releases/latest/download/gorcon-linux-arm64  -O /usr/local/bin/rcon \
 	&& chmod +x /usr/local/bin/rcon
