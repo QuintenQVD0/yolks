@@ -46,7 +46,7 @@ fi
 if [ -f "/home/container/rootfs/Ubuntu_24_04/break_chroot.sh" ] || \
    [ -f "${FEX_ROOTFS_PATH}/RootFS/Ubuntu_24_04/break_chroot.sh" ]; then
     if [ ! -f "/home/container/Config.json" ]; then
-        echo '{"Config":{"RootFS":"Ubuntu_24_04"}}' > /home/container/Config.json
+        echo "{\"Config\":{\"RootFS\":\"${FEX_ROOTFS_PATH}Ubuntu_24_04\"}}" > /home/container/Config.json
         log_info "Generated missing Config.json"
     fi
 fi
