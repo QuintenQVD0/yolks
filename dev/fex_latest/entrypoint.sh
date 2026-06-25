@@ -7,10 +7,10 @@ RED='\033[0;31m'
 BLUE='\033[1;34m'
 NC='\033[0m' # No Color
 
-log_info() { echo -e "${GREEN}[INFO]${NC} $1"; }
-log_warn() { echo -e "${YELLOW}[WARN]${NC} $1"; }
-log_error() { echo -e "${RED}[ERROR]${NC} $1"; }
-log_debug() { echo -e "${BLUE}[DEBUG]${NC} $1"; }
+log_info()  { echo -e "[$(date '+%H:%M:%S')] ${GREEN}[INFO]${NC} $1"; }
+log_warn()  { echo -e "[$(date '+%H:%M:%S')] ${YELLOW}[WARN]${NC} $1"; }
+log_error() { echo -e "[$(date '+%H:%M:%S')] ${RED}[ERROR]${NC} $1"; }
+log_debug() { echo -e "[$(date '+%H:%M:%S')] ${BLUE}[DEBUG]${NC} $1"; }
 
 cd /home/container || { log_error "Failed to change to /home/container"; exit 1; }
 
@@ -30,26 +30,52 @@ else
     log_info "Using custom RootFS path: ${FEX_ROOTFS_PATH}"
 fi
 
-# Check for RootFS
-if [ -d "/home/container/rootfs/" ] || [ -d "${FEX_ROOTFS_PATH}/RootFS" ]; then
-    log_info "RootFS already present"
+# --- Ubuntu version override ---
+# Supported: 22.04, 24.04 (default: 22.04)
+if [ -z "${UBUNTU_VERSION}" ]; then
+    export UBUNTU_VERSION="22.04"
 else
-    log_warn "RootFS not found. Downloading..."
+    log_info "UBUNTU_VERSION set to: ${UBUNTU_VERSION}"
+fi
+
+# Derive the RootFS directory name from the version (e.g. 24.04 -> Ubuntu_24_04)
+UBUNTU_VERSION_SAFE=$(echo "${UBUNTU_VERSION}" | tr '.' '_')
+ROOTFS_NAME="Ubuntu_${UBUNTU_VERSION_SAFE}"
+log_debug "RootFS name: ${ROOTFS_NAME}"
+
+# Check for RootFS
+if [ -d "/home/container/rootfs/" ] || [ -d "${FEX_ROOTFS_PATH}/RootFS/${ROOTFS_NAME}" ]; then
+    log_info "RootFS already present (${ROOTFS_NAME})"
+else
+    log_warn "RootFS not found. Downloading ${ROOTFS_NAME}..."
     echo -e "\n${YELLOW}This server requires at least 9GB of disk space!${NC}"
     export FEX_APP_DATA_LOCATION="${FEX_ROOTFS_PATH}"
     export FEX_APP_CONFIG_LOCATION="/home/container/"
     export XDG_DATA_HOME="/home/container"
-    FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=22.04
+    FEXRootFSFetcher -y -x --distro-name=ubuntu --distro-version=${UBUNTU_VERSION}
 fi
 
-# Generate Config.json if needed
-if [ -f "/home/container/rootfs/Ubuntu_22_04/break_chroot.sh" ] || \
-   [ -f "${FEX_ROOTFS_PATH}/RootFS/Ubuntu_22_04/break_chroot.sh" ]; then
-    if [ ! -f "/home/container/Config.json" ]; then
-        echo '{"Config":{"RootFS":"Ubuntu_22_04"}}' > /home/container/Config.json
-        log_info "Generated missing Config.json"
+# Generate or update Config.json if needed
+ROOTFS_MARKER_NEW="${FEX_ROOTFS_PATH}/RootFS/${ROOTFS_NAME}/break_chroot.sh"
+ROOTFS_MARKER_OLD="/home/container/rootfs/${ROOTFS_NAME}/break_chroot.sh"
+CONFIG_FILE="/home/container/Config.json"
+
+
+if [ -f "${ROOTFS_MARKER_NEW}" ] || [ -f "${ROOTFS_MARKER_OLD}" ]; then
+    CURRENT_ROOTFS=""
+    if [ -f "${CONFIG_FILE}" ]; then
+        CURRENT_ROOTFS=$(grep -oP '"RootFS"\s*:\s*"\K[^"]+' "${CONFIG_FILE}" 2>/dev/null || true)
+    fi
+
+    if [ "${CURRENT_ROOTFS}" != "${ROOTFS_NAME}" ]; then
+        log_warn "Config.json mismatch (current: '${CURRENT_ROOTFS}', expected: '${ROOTFS_NAME}'). Rewriting..."
+        echo "{\"Config\":{\"RootFS\":\"${ROOTFS_NAME}\"}}" > "${CONFIG_FILE}"
+        log_info "Config.json updated to use ${ROOTFS_NAME}"
+    else
+        log_info "Config.json already correct (${ROOTFS_NAME})"
     fi
 fi
+
 
 sleep 2
 
@@ -59,7 +85,7 @@ export FEX_APP_CONFIG_LOCATION="/home/container/"
 export XDG_DATA_HOME="/home/container"
 
 # Check Config.json presence
-if [ -f "/home/container/Config.json" ]; then
+if [ -f "${CONFIG_FILE}" ]; then
     log_info "Config.json found, continuing"
 
     # Handle Steam credentials

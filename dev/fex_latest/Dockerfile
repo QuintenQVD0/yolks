@@ -18,7 +18,7 @@ RUN     wget -q https://ppa.launchpadcontent.net/fex-emu/fex/ubuntu/pool/main/f/
 
 RUN	apt update \ 
         && apt -y install git iproute2 libssl-dev tzdata tar zip build-essential unzip gdb gettext screen xvfb numactl libc6 libstdc++6 strace erofs-utils \
-		&& wget http://launchpadlibrarian.net/668077130/libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
+		&& wget -q http://launchpadlibrarian.net/668077130/libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
   		&& dpkg -i libssl1.1_1.1.1f-1ubuntu2.19_arm64.deb \
         && ls -la /usr/local/bin
 
