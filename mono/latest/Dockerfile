@@ -5,7 +5,9 @@ LABEL       author="QuintenQVD" maintainer="josdekurk@gmail.com"
 RUN         apt update \
             && apt -y upgrade
 RUN         apt install -y fontconfig dirmngr ca-certificates gnupg
-RUN         gpg --homedir /tmp --no-default-keyring --keyring /usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+RUN         sed -i 's/sha1.second_preimage_resistance.*/sha1.second_preimage_resistance = 2026-12-31/' /usr/share/apt/default-sequoia.config
+RUN         gpg --homedir /tmp --no-default-keyring --keyring gnupg-ring:/usr/share/keyrings/mono-official-archive-keyring.gpg --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 3FA7E0328081BFF6A14DA29AA6A19B38D3D831EF
+RUN         chmod +r /usr/share/keyrings/mono-official-archive-keyring.gpg
 RUN         echo "deb [signed-by=/usr/share/keyrings/mono-official-archive-keyring.gpg] https://download.mono-project.com/repo/debian stable-buster main" | tee /etc/apt/sources.list.d/mono-official-stable.list
 RUN         apt update
 RUN         apt install -y mono-complete
