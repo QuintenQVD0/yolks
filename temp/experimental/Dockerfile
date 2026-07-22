@@ -34,7 +34,7 @@ RUN	            wget -q -O /usr/sbin/winetricks https://raw.githubusercontent.co
                 && chmod +x /usr/sbin/winetricks
 
 
-RUN             wget -q -O zulu_21.deb https://cdn.azul.com/zulu/bin/zulu21.46.19-ca-jre21.0.9-linux_amd64.deb \
+RUN             wget -q -O zulu_21.deb https://cdn.azul.com/zulu/bin/zulu21.52.15-ca-jre21.0.12-linux_amd64.deb \
                 && dpkg -i zulu_21.deb \
                 && rm zulu_21.deb
 

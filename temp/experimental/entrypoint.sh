@@ -183,7 +183,7 @@ if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
 
         # If already extracted, reuse it
         if [ -d "${INSTALL_PATH}" ] && [ -f "${INSTALL_PATH}/Setup.exe" ]; then
-            cecho info "Detected existing extracted folder — skipping extraction."
+            cecho info "Detected existing extracted folder - skipping extraction."
         else
             cecho info "Extracting image file to ${INSTALL_PATH}..."
             rm -rf "${INSTALL_PATH}"
