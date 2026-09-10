@@ -104,7 +104,7 @@ if [ -f "${CONFIG_FILE}" ]; then
             log_info "Auto-updating game server (AppID: ${SRCDS_APPID})"
             export HOME="/home/container"
             if [ "${STEAM_USER}" == "anonymous" ]; then
-                FEXInterpreter ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
+                FEX ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
                 $( [[ "${WINDOWS_INSTALL}" == "1" ]] && printf %s '+@sSteamCmdForcePlatformType windows' ) \
                 +app_update ${SRCDS_APPID} \
                 $( [[ -z "${SRCDS_BETAID}" ]] || printf %s "-beta ${SRCDS_BETAID}" ) \
@@ -113,7 +113,7 @@ if [ -f "${CONFIG_FILE}" ]; then
                 ${INSTALL_FLAGS} \
                 $( [[ "${VALIDATE}" == "1" ]] && printf %s 'validate' ) +quit
             else
-                FEXInterpreter ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
+                FEX ./steamcmd/steamcmd.sh +force_install_dir /home/container +login ${STEAM_USER} ${STEAM_PASS} ${STEAM_AUTH} \
                 $( [[ "${WINDOWS_INSTALL}" == "1" ]] && printf %s '+@sSteamCmdForcePlatformType windows' ) \
                 +app_update ${SRCDS_APPID} \
                 $( [[ -z "${SRCDS_BETAID}" ]] || printf %s "-beta ${SRCDS_BETAID}" ) \
