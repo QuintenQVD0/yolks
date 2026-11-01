@@ -1,5 +1,7 @@
 FROM        debian:trixie-slim
 
+ENV   DEBIAN_FRONTEND=noninteractive
+
 ## install required packages
 RUN         dpkg --add-architecture i386
 RUN         apt update
