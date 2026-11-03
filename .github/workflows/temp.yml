@@ -84,7 +84,6 @@ jobs:
         tag:
           - nodejs_18_puppeteer
           - pavlov_vr
-          - rathena
           - "experimental"
           - "java_21"
           - mta
