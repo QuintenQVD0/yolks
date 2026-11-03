@@ -31,7 +31,7 @@ RUN             rm -rf /var/lib/apt/lists/*
 RUN             update-alternatives --install /usr/bin/x-www-browser x-www-browser /usr/bin/firefox 500
 RUN             update-alternatives --set x-www-browser /usr/bin/firefox
 # Set up legendary
-RUN	            wget -q -O /usr/sbin/legendary https://github.com/legendary-gl/legendary/releases/download/0.21.0/legendary_linux_x64 \
+RUN	            wget -q -O /usr/sbin/legendary https://github.com/legendary-gl/legendary/releases/download/0.21.1/legendary_linux_x64 \
                 && chmod +x /usr/sbin/legendary
 
 
