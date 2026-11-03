@@ -70,7 +70,79 @@ start_vnc() {
     /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" --log-file "/home/container/.vnc/websockify.txt" localhost:5900
 }
 
+# -----------------------------------------
+# Epic Games / Legendary functions
+# -----------------------------------------
 
+epic_filter_stderr() {
+    sed -E '
+        s/ \[[0-9]+\] Sandbox: CanCreateUserNamespace\(\) clone\(\) failure: EPERM$//;
+        s/^WARNING: Glycin running without sandbox\.$//;
+        s/^\[Parent [0-9]+, Main Thread\] WARNING: Failed to create DBus proxy for org\.a11y\.Bus:.*$//;
+        s/^\[Parent [0-9]+, Main Thread\] WARNING: Failed to create DBus proxy for org\.freedesktop\.UPower:.*$//;
+        s/^: '\''glib warning'\'', file .*nsSigHandlers\.cpp:201$//;
+        s/^\*\* \(firefox:[0-9]+\): WARNING \*\*: .*Failed to create DBus proxy for org\.a11y\.Bus:.*$//;
+        s/^\*\* \(firefox:[0-9]+\): WARNING \*\*: .*Failed to create DBus proxy for org\.freedesktop\.UPower:.*$//;
+        s/^libEGL warning: DRI3 error: Could not get DRI3 device$//;
+        s/^libEGL warning: Ensure your X server supports DRI3 to get accelerated rendering$//;
+        /^[[:space:]]*$/d
+    ' >&2
+}
+
+
+epic_login() {
+    cecho info "Waiting for Epic Games authentication..."
+
+    legendary auth 2> >(epic_filter_stderr)
+
+    # Check whether Legendary considers the account authenticated.
+    if legendary status | grep -Fq 'not logged in'; then
+        cecho error "Epic Games login failed. Exiting."
+        return 1
+    fi
+
+    cecho success "Epic Games authentication successful."
+}
+
+
+epic_check_ownership() {
+    local game="Farming Simulator ${FS_VERSION}"
+
+    cecho info "Checking Epic Games ownership..."
+
+    if legendary list | grep -Fq "${game}"; then
+        cecho success "This Epic Games account owns ${game}."
+        return 0
+    fi
+
+    cecho error "This Epic Games account does not own ${game}!"
+    return 1
+}
+
+
+epic_install_game() {
+    local game="Farming Simulator ${FS_VERSION}"
+
+    cecho info "Downloading and installing ${game}..."
+
+    mkdir -p /home/container/farming
+    if ! legendary install "${game}" \
+        -y \
+        --max-workers 4 \
+        --base-path /home/container/farming; then
+
+        cecho error "Failed to install ${game}!"
+        return 1
+    fi
+
+    if legendary list-installed | grep -Fq "${game}"; then
+        cecho success "${game} installed successfully."
+        return 0
+    fi
+
+    cecho error "Installation verification failed for ${game}!"
+    return 1
+}
 
 # Display system information
 cecho system "Running on Debian version: $(cat /etc/debian_version)"
@@ -104,11 +176,6 @@ if [ -f /home/container/.vnc/passwd ]; then
     echo "${VNC_PASS}" | vncpasswd -f > /home/container/.vnc/passwd
 fi
 
-# Install additional Winetricks
-for trick in $WINETRICKS_RUN; do
-    echo "Installing Winetrick: $trick"
-    winetricks -q "$trick"
-done
 
 # Kill any old VNC sessions if running
 cecho info "Killing any existing VNC sessions..."
@@ -165,6 +232,8 @@ else
   fi
 fi
 
+# set the default browser
+export BROWSER=/usr/bin/firefox
 
 # Handle various progression states
 if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
@@ -212,8 +281,7 @@ if [ "${PROGRESSION}" == "INSTALL_SERVER" ]; then
         STARTCMD="wine /fs/FarmingSimulator20${FS_VERSION}.exe /SILENT /SP- /DIR=\"Z:\home\container\Farming Simulator 20${FS_VERSION}\""
     fi
 elif [ "${PROGRESSION}" == "INSTALL_DLC" ] && [ -n "${DLC_EXE}" ]; then
-    /usr/bin/vncserver -geometry 1920x1080 -rfbport "5900" -rfbauth /home/container/.vnc/passwd -localhost
-    /usr/bin/websockify -D --web /usr/share/novnc "${VNC_PORT}" localhost:5900
+    start_vnc "Installing DLC"
     
     STARTCMD="wine /home/container/dlc_install/${DLC_EXE}"
 
@@ -229,6 +297,35 @@ elif [ "${PROGRESSION}" == "RUN" ] && [ -f "/home/container/.vnc/passwd" ]; then
 
     print_message "You can now configure the server on the dashboard.\n\nConnect to the VNC server here: https://${SERVER_IP}:${VNC_PORT}"
     STARTCMD=$(echo "${STARTUP}" | sed -e 's/{{/${/g' -e 's/}}/}/g')
+
+elif [[ "${PROGRESSION}" == "INSTALL_EPIC" ]]; then
+
+    start_vnc "Installing Epic Games"
+
+    print_message "Please visit https://${SERVER_IP}:${VNC_PORT}, connect to VNC and log in to your Epic Games account."
+
+    # Authenticate Epic Games account
+    epic_login || exit 1
+
+    # Verify game ownership
+    epic_check_ownership || exit 1
+
+    # Download and install the game
+    epic_install_game || exit 1
+
+
+elif [[ "${PROGRESSION}" == "RUN_EPIC" ]] && [[ -f "/home/container/.vnc/passwd" ]]; then
+
+    start_vnc "Farming Simulator 22/25 Server"
+
+    print_message "Please visit https://${SERVER_IP}:${VNC_PORT}, connect to VNC and log in to your Epic Games account."
+
+    # Authenticate Epic Games account
+    epic_login || exit 1
+
+    print_message "You can now configure the server on the dashboard. Connect to the VNC server here: https://${SERVER_IP}:${VNC_PORT}"
+        
+    STARTCMD="legendary launch \"Farming Simulator ${FS_VERSION}\" --wine-prefix /home/container/.wine --override-exe /home/container/farming/FarmingSimulator${FS_VERSION}/FarmingSimulator20${FS_VERSION}.exe -server"
 else
     # Unrecognized progression state
     cecho error "Error: The PROGRESSION variable is set to an unknown value."
@@ -241,6 +338,6 @@ cecho bold "Starting with command: ${STARTCMD}"
 eval "${STARTCMD}"
 
 # Keep session alive if needed
-if [[ "$PROGRESSION" == "ACTIVATE" || "$PROGRESSION" == "INSTALL_DLC" ]]; then
+if [[ "$PROGRESSION" == "ACTIVATE" || "$PROGRESSION" == "INSTALL_DLC" || "$PROGRESSION" == "INSTALL_EPIC" ]]; then
     tail -f /dev/null
 fi
